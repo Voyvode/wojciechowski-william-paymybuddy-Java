@@ -4,10 +4,11 @@ CREATE TABLE test.customer (
 	id SERIAL PRIMARY KEY,
 	username VARCHAR(32) UNIQUE NOT NULL,
 	email VARCHAR(254) UNIQUE NOT NULL,
-	password_hash CHAR(60), -- bcrypt
+	password_hash CHAR(60) NOT NULL, -- bcrypt
 	signup TIMESTAMP NOT NULL
 );
 CREATE INDEX test.index_username ON test.customer(username); -- user search optimization
+CREATE INDEX test.index_email ON test.customer(email); -- user search optimization
 
 CREATE TABLE test.buddy (
 	PRIMARY KEY (customer_id, buddy_id),

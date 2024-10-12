@@ -2,10 +2,11 @@ CREATE TABLE customer (
     id SERIAL PRIMARY KEY,
     username VARCHAR(32) UNIQUE NOT NULL,
     email VARCHAR(254) UNIQUE NOT NULL,
-    password_hash CHAR(60), -- bcrypt
+    password_hash CHAR(60) NOT NULL, -- bcrypt
 	signup TIMESTAMP NOT NULL
 );
 CREATE INDEX index_username ON customer(username); -- user search optimization
+CREATE INDEX index_email ON customer(email); -- user search optimization
 
 CREATE TABLE buddy (
 	PRIMARY KEY (customer_id, buddy_id),
