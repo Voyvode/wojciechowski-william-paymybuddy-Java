@@ -1,13 +1,13 @@
 package com.paymybuddy.model;
 
 import javax.money.Monetary;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
-public record Transfer(
-		int id,
-		LocalDateTime date,
-		Customer sender,
-		Customer receiver,
-		String description,
-		Monetary amount
-) { }
+public class Transfer {
+	Long id;
+	Customer sender;
+	Customer receiver;
+	String description;
+	Monetary amount;
+	Instant timestamp;
+}

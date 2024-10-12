@@ -1,7 +1,11 @@
 package com.paymybuddy.model;
 
-public record Buddy(
-		int id,
-		String customerId,
-		String buddy
-) { }
+import lombok.Data;
+
+@Data
+public class Buddy {
+	Long id;
+	String customerId;
+	String buddy;
+}
+//todo: class + annotation JPA
