@@ -1,13 +1,15 @@
 package com.paymybuddy.feature.buddy;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Entity
+@Table(name = "buddy")
+@NoArgsConstructor
+@Data
 public class Buddy {
 
 	@EmbeddedId
@@ -15,6 +17,7 @@ public class Buddy {
 
 }
 
+@Data
 @Embeddable
 class BuddyId implements Serializable {
 
