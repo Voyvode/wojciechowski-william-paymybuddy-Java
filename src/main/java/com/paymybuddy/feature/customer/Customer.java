@@ -1,13 +1,15 @@
 package com.paymybuddy.feature.customer;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 @Entity
-@Getter
+@Table(name = "customer")
+@NoArgsConstructor
+@Data
 public class Customer {
 
 	@Id
@@ -20,20 +22,17 @@ public class Customer {
 	@Column(nullable = false, unique = true, length = 254)
 	private String email;
 
-	@Setter
-	@Column(nullable = false, length = 60, name = "password_hash")
+	@Column(nullable = false, length = 60)
 	private String passwordHash;
 
-//	List<Customer> buddies;
-
 	@Column(nullable = false)
-	private Instant signup;
+	private Instant signupAt;
 
 	public Customer(String username, String email, String passwordHash) {
 		this.username = username;
 		this.email = email;
 		this.passwordHash = passwordHash;
-		signup = Instant.now();
+		signupAt = Instant.now();
 	}
 
 }

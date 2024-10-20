@@ -1,9 +1,14 @@
 package com.paymybuddy.feature.customer;
 
-import com.paymybuddy.core.exceptions.UsernameNotFoundException;
-import jakarta.validation.Valid;
+import com.paymybuddy.core.exceptions.CustomerNotFoundException;
+import com.paymybuddy.core.exceptions.EmailAlreadyExistsException;
+import com.paymybuddy.core.exceptions.UsernameAlreadyExistsException;
+import com.paymybuddy.feature.customer.dto.CustomerDTO;
+import com.paymybuddy.feature.customer.dto.NewCustomerDTO;
+import com.paymybuddy.feature.customer.dto.UpdatedCustomerDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,22 +31,17 @@ public class CustomerController {
 	/**
 	 * Registers a new customer.
 	 *
-	 * @param username the new customer username
-	 * @param email the new customer email
-	 * @param password the new customer password
+	 * @param newCustomer the new customer to be registered
 	 * @return ResponseEntity with status CREATED if successful, or CONFLICT if the email or the
 	 *         username is already used
 	 */
 	@PostMapping
-	public ResponseEntity<Void> create(@RequestBody @Valid String username,
-									   @RequestBody @Valid String email,
-									   @RequestBody @Valid String password) {
-		if (service.register(username, email, password)) {
-			log.info("New customer {} registered with email {}", username, email);
+	public ResponseEntity<Void> create(@RequestBody NewCustomerDTO newCustomer) {
+		if (service.register(newCustomer.getUsername(), newCustomer.getEmail(), newCustomer.getPassword())) {
+			log.info("New customer '{}' registered with email '{}'", newCustomer.getUsername(), newCustomer.getEmail());
 			return ResponseEntity.status(CREATED).build();
 		} else {
-			// TODO: log plus spécifique
-			log.info("Username {} or email {} already used", username, email);
+			log.info("Username '{}' or email '{}' already used", newCustomer.getUsername(), newCustomer.getEmail());
 			return ResponseEntity.status(CONFLICT).build();
 		}
 	}
@@ -49,60 +49,46 @@ public class CustomerController {
 	/**
 	 * Gets a customer.
 	 *
-	 * @param username the new customer to be registered
+	 * @param customer the registered customer to retrieve
 	 * @return ResponseEntity with status CREATED if successful, or CONFLICT if the email or the
 	 *         username is already used
 	 */
 	@GetMapping
-	public ResponseEntity<Void> read(@RequestBody String username, @RequestBody String password) throws UsernameNotFoundException {
-		if (service.authenticate(username, password)) {
-			log.info("Customer {} sign in", username);
+	public ResponseEntity<Void> read(@RequestBody CustomerDTO customer) throws AuthenticationException {
+		if (service.authenticate(customer.getEmail(), customer.getPassword())) {
+			log.info("Customer {} sign in", customer.getEmail());
 			return ResponseEntity.status(CREATED).build();
 		} else {
-			log.info("Customer {} doesn't exist or wrong password", username);
+			log.info("Customer {} doesn't exist or wrong password", customer.getEmail());
 			return ResponseEntity.status(CONFLICT).build();
 		}
 	}
 
-// TODO: Mis à jour du profil
-//	/**
-//	 * Updates a customer.
-//	 *
-//	 * @param customer the customer to update
-//	 * @param updatedCustomer the updated customer
-//	 * @return ResponseEntity with status OK if successful, or NOT_FOUND if the customer
-//	 *         doesn't exist
-//	 */
-//	@PutMapping("/{address}")
-//	public ResponseEntity<Void> update(@PathVariable String email, @RequestBody @Valid Customer updatedCustomer) {
-//		if (service.update(address, updatedCustomer)) {
-//			log.info("{} is now assigned to station {}", address, updatedCustomer.getStation());
-//			return ResponseEntity.ok().build();
-//		} else {
-//			log.error("{} is not assigned, nothing to update", address);
-//			return ResponseEntity.notFound().build();
-//		}
-//	}
-
-// REMARQUE: Aucun bouton SUPPRIMER UTILISATEUR dans la maquette
-//	/**
-//	 * Deletes a customer.
-//	 *
-//	 * @param address the assigned address to delete
-//	 * @return ResponseEntity with status NO_CONTENT if successful, or NOT_FOUND if the
-//	 *         address is not assigned
-//	 */
-//	@DeleteMapping("/{address}")
-//	public ResponseEntity<Void> delete(@PathVariable("address") String address) {
-//		var deletedCustomer = service.deleteFirestation(address);
-//
-//		if (deletedCustomer != null) {
-//			log.info("{} is not assigned to station {} any more", address, deletedCustomer.getEmail());
-//			return ResponseEntity.noContent().build();
-//		} else {
-//			log.error("{} is not assigned, nothing to delete", address);
-//			return ResponseEntity.notFound().build();
-//		}
-//	}
+	/**
+	 * Updates a customer's profile.
+	 *
+	 * @param customerId the ID of the customer to update
+	 * @param updatedCustomer the updated customer information
+	 * @return ResponseEntity with status OK if successful, NOT_FOUND if the customer doesn't exist,
+	 *         or CONFLICT if the new email or username is already in use
+	 */
+	@PutMapping("/{customerId}")
+	public ResponseEntity<Void> updateProfile(@PathVariable Long customerId, @RequestBody UpdatedCustomerDTO updatedCustomer)
+			throws UsernameAlreadyExistsException, EmailAlreadyExistsException, CustomerNotFoundException {
+		try {
+			System.out.println(customerId);
+			boolean updated = service.updateCustomer(customerId, updatedCustomer);
+			if (updated) {
+				log.info("Customer {} updated successfully", customerId);
+				return ResponseEntity.ok().build();
+			} else {
+				log.info("Customer {} not found", customerId);
+				return ResponseEntity.notFound().build();
+			}
+		} catch (IllegalArgumentException e) {
+			log.info("Conflict while updating customer {}: {}", customerId, e.getMessage());
+			return ResponseEntity.status(CONFLICT).build();
+		}
+	}
 
 }
