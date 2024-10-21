@@ -2,20 +2,17 @@ package com.paymybuddy.feature.buddy;
 
 import com.paymybuddy.core.exceptions.CustomerNotFoundException;
 import com.paymybuddy.feature.customer.CustomerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class BuddyService {
 
 	private final BuddyRepository buddyRepo;
 	private final CustomerRepository customerRepo;
-
-	public BuddyService(BuddyRepository buddyRepo, CustomerRepository customerRepo) {
-		this.buddyRepo = buddyRepo;
-		this.customerRepo = customerRepo;
-	}
 
 	public void addBuddy(Long customerId, Long otherCustomerId) throws CustomerNotFoundException, IllegalArgumentException {
 		if (!customerRepo.existsById(customerId)) {
@@ -43,8 +40,11 @@ public class BuddyService {
 	}
 
 	public List<String> getBuddies(Long customerId) throws CustomerNotFoundException {
-		// TODO: Renvoyer uniquement une liste de usernames pour ne pas exposer l’id ou l’email ?
-		return null;
+		if (!customerRepo.existsById(customerId)) {
+			throw new CustomerNotFoundException("Customer with id " + customerId + " not found");
+		}
+
+		return buddyRepo.findBuddyUsernamesByCustomerId(customerId);
 	}
 
 }
