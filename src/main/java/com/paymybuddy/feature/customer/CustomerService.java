@@ -6,19 +6,16 @@ import com.paymybuddy.core.exceptions.UsernameAlreadyExistsException;
 import com.paymybuddy.core.security.SecurityService;
 import com.paymybuddy.feature.customer.dto.UpdatedCustomerDTO;
 import jakarta.persistence.EntityExistsException;
+import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CustomerService {
 
 	private final CustomerRepository repository;
 	private final SecurityService security;
-
-	public CustomerService(CustomerRepository repository, SecurityService security) {
-		this.repository = repository;
-		this.security = security;
-	}
 
 	public boolean register(String username, String email, String password) throws EntityExistsException {
 		repository.findByUsernameOrEmail(username, email)
@@ -40,7 +37,7 @@ public class CustomerService {
 		return true;
 	}
 
-	public boolean updateCustomer(Long customerId, UpdatedCustomerDTO updatedCustomer) throws CustomerNotFoundException, UsernameAlreadyExistsException, EmailAlreadyExistsException {
+	public boolean update(Long customerId, UpdatedCustomerDTO updatedCustomer) throws CustomerNotFoundException, UsernameAlreadyExistsException, EmailAlreadyExistsException {
 		var existingCustomer = repository.findById(customerId)
 				.orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + customerId));
 

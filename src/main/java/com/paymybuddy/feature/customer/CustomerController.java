@@ -35,8 +35,8 @@ public class CustomerController {
 	 * @return ResponseEntity with status CREATED if successful, or CONFLICT if the email or the
 	 *         username is already used
 	 */
-	@PostMapping
-	public ResponseEntity<Void> create(@RequestBody NewCustomerDTO newCustomer) {
+	@PostMapping("/register")
+	public ResponseEntity<Void> register(@RequestBody NewCustomerDTO newCustomer) {
 		if (service.register(newCustomer.getUsername(), newCustomer.getEmail(), newCustomer.getPassword())) {
 			log.info("New customer '{}' registered with email '{}'", newCustomer.getUsername(), newCustomer.getEmail());
 			return ResponseEntity.status(CREATED).build();
@@ -47,17 +47,17 @@ public class CustomerController {
 	}
 
 	/**
-	 * Gets a customer.
+	 * Authenticates a customer.
 	 *
 	 * @param customer the registered customer to retrieve
-	 * @return ResponseEntity with status CREATED if successful, or CONFLICT if the email or the
+	 * @return ResponseEntity with status OK if successful, or CONFLICT if the email or the
 	 *         username is already used
 	 */
-	@GetMapping
-	public ResponseEntity<Void> read(@RequestBody CustomerDTO customer) throws AuthenticationException {
+	@PostMapping("/login")
+	public ResponseEntity<Void> authenticate(@RequestBody CustomerDTO customer) throws AuthenticationException {
 		if (service.authenticate(customer.getEmail(), customer.getPassword())) {
 			log.info("Customer {} sign in", customer.getEmail());
-			return ResponseEntity.status(CREATED).build();
+			return ResponseEntity.ok().build();
 		} else {
 			log.info("Customer {} doesn't exist or wrong password", customer.getEmail());
 			return ResponseEntity.status(CONFLICT).build();
@@ -65,19 +65,19 @@ public class CustomerController {
 	}
 
 	/**
-	 * Updates a customer's profile.
+	 * Updates customer's information.
 	 *
 	 * @param customerId the ID of the customer to update
 	 * @param updatedCustomer the updated customer information
 	 * @return ResponseEntity with status OK if successful, NOT_FOUND if the customer doesn't exist,
 	 *         or CONFLICT if the new email or username is already in use
 	 */
-	@PutMapping("/{customerId}")
-	public ResponseEntity<Void> updateProfile(@PathVariable Long customerId, @RequestBody UpdatedCustomerDTO updatedCustomer)
+	@PutMapping("/update/{customerId}")
+	public ResponseEntity<Void> update(@PathVariable Long customerId, @RequestBody UpdatedCustomerDTO updatedCustomer)
 			throws UsernameAlreadyExistsException, EmailAlreadyExistsException, CustomerNotFoundException {
 		try {
 			System.out.println(customerId);
-			boolean updated = service.updateCustomer(customerId, updatedCustomer);
+			boolean updated = service.update(customerId, updatedCustomer);
 			if (updated) {
 				log.info("Customer {} updated successfully", customerId);
 				return ResponseEntity.ok().build();
