@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscription - PayMyBuddy</title>
+    <link rel="stylesheet" th:href="@{/css/search.css}" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="search-page">
+    <header class="header">
+        <div class="logo">Pay My Buddy</div>
+        <nav class="nav-items">
+            <a href="#" class="nav-item">Transférer</a>
+            <a href="#" class="nav-item">Profil</a>
+            <a href="#" class="nav-item active">Ajouter relation</a>
+            <a href="#" class="nav-item">Se déconnecter</a>
+        </nav>
+    </header>
+
+    <form class="search-form">
+        <div class="input-group">
+            <label for="search-relation" class="input-label">Chercher une relation</label>
+            <input type="text" id="search-relation" class="input-field" placeholder="Saisir une adresse mail">
+        </div>
+        <button type="submit" class="btn-add">Ajouter</button>
+    </form>
+</div>
+</body>
+</html>

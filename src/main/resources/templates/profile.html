@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Recherche - PayMyBuddy</title>
+    <link rel="stylesheet" th:href="@{/css/profile.css}" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet"></head>
+<body>
+<div class="profile-page">
+    <header class="header">
+        <div class="logo">Pay My Buddy</div>
+        <nav class="nav-items">
+            <a href="#" class="nav-item">Transférer</a>
+            <a href="#" class="nav-item active">Profil</a>
+            <a href="#" class="nav-item">Ajouter relation</a>
+            <a href="#" class="nav-item">Se déconnecter</a>
+        </nav>
+    </header>
+
+    <section class="profile-section">
+        <div class="profile-info">
+            <div class="info-row">
+                <span class="info-label">Username</span>
+                <span class="info-value">@username</span>
+                <span class="chevron-right">&#8250;</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Mail</span>
+                <span class="info-value">nom@domain.com</span>
+                <span class="chevron-right">&#8250;</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Mot de passe</span>
+                <span class="info-value">••••••••</span>
+                <span class="chevron-right">&#8250;</span>
+            </div>
+            <button class="btn-modify">Modifier</button>
+        </div>
+    </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,192 @@
+/* Page de transfert */
+.transfer-page {
+    position: relative;
+    width: 100%;
+    max-width: 1440px;
+    height: 1024px;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+}
+
+/* Header Navigation */
+.header {
+    position: absolute;
+    width: 100%;
+    height: 164px;
+    left: 0;
+    top: 15px;
+    background-color: #FFFFFF;
+}
+
+.nav-items {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 48px;
+    position: absolute;
+    right: 80px;
+    top: 56px;
+}
+
+.nav-item {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 150%;
+    color: #000000;
+    text-decoration: none;
+}
+
+.nav-item.active {
+    font-weight: 700;
+    color: #207FEE;
+}
+
+.logo {
+    position: absolute;
+    left: calc(50% - 137px/2 - 571.5px);
+    top: calc(50% - 30px/2);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 150%;
+    color: #000000;
+}
+
+/* Transfer Form */
+.transfer-form {
+    position: absolute;
+    top: 239px;
+    left: 98px;
+    display: flex;
+    gap: 42px;
+}
+
+.dropdown {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 16px;
+    width: 399px;
+    height: 81px;
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+}
+
+.dropdown select {
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 24px;
+    color: #000000;
+    border: none;
+    background: transparent;
+    appearance: none;
+}
+
+.input-field {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 8px;
+    width: 382px;
+    height: 81px;
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+}
+
+.input-field input {
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 24px;
+    color: #000000;
+    border: none;
+}
+
+.btn-transfer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 24px;
+    gap: 8px;
+    width: 120px;
+    height: 88px;
+    background: #207FEE;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 150%;
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+}
+
+/* Transfer Table */
+.transfer-table {
+    box-sizing: border-box;
+    position: absolute;
+    width: 1311px;
+    height: 426px;
+    left: 80px;
+    bottom: 96px;
+    border: 1px solid #E0E0E0;
+    filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.04));
+    border-radius: 8px;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 24px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 150%;
+    color: #000000;
+}
+
+.table-body {
+    padding: 0 24px;
+}
+
+.table-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-top: 1px solid #E0E0E0;
+}
+
+.table-cell {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 150%;
+    color: #000000;
+}
+
+.table-cell:first-child {
+    font-weight: 500;
+}
+
+.table-cell:last-child {
+    text-align: right;
+}
