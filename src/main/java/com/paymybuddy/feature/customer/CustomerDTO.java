@@ -1,20 +1,22 @@
-package com.paymybuddy.feature.customer.dto;
+package com.paymybuddy.feature.customer;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 
 @Data
-public class NewCustomerDTO {
+@Builder
+public class CustomerDTO {
 
-	@NonNull
-	private String username;
-
-	@NonNull @Email
+	@NotBlank @Email
 	private String email;
 	private String emailConfirm;
 
-	@NonNull
+	@NotBlank
+	private String username;
+
+	@NotBlank
 	private String password;
 	private String passwordConfirm;
 
@@ -27,4 +29,3 @@ public class NewCustomerDTO {
 	}
 
 }
-

@@ -4,11 +4,16 @@ import com.paymybuddy.feature.customer.Customer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
+@Table(name = "transfer")
+@NoArgsConstructor
+@Data
 public class Transfer {
 
 	@Id
@@ -33,4 +38,5 @@ public class Transfer {
 
 	@Column(nullable = false)
 	Instant timestamp;
+
 }

@@ -4,18 +4,18 @@ import com.paymybuddy.core.exceptions.CustomerNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
-@Validated
 @Slf4j
-@RequestMapping("/api/buddies")
+@Validated
 public class BuddyController {
 
 	private final BuddyService service;
@@ -35,15 +35,20 @@ public class BuddyController {
 		}
 	}
 
-	@GetMapping
-	public ResponseEntity<List<String>> getBuddies(@RequestParam Long customerId) {
-		try {
-			List<String> buddies = service.getBuddies(customerId);
-			return ResponseEntity.ok(buddies);
-		} catch (CustomerNotFoundException e) {
-			log.info("Customer {} not found", customerId);
-			return ResponseEntity.notFound().build();
-		}
+	@GetMapping("/search")
+	public String showSearch() {
+		return "search";
 	}
+
+//	@GetMapping
+//	public ResponseEntity<List<String>> getBuddies(@RequestParam Long customerId) {
+//		try {
+//			List<String> buddies = service.getBuddies(customerId);
+//			return ResponseEntity.ok(buddies);
+//		} catch (CustomerNotFoundException e) {
+//			log.info("Customer {} not found", customerId);
+//			return ResponseEntity.notFound().build();
+//		}
+//	}
 
 }

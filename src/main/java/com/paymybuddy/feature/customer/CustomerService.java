@@ -4,7 +4,6 @@ import com.paymybuddy.core.exceptions.CustomerNotFoundException;
 import com.paymybuddy.core.exceptions.EmailAlreadyExistsException;
 import com.paymybuddy.core.exceptions.UsernameAlreadyExistsException;
 import com.paymybuddy.core.security.SecurityService;
-import com.paymybuddy.feature.customer.dto.UpdatedCustomerDTO;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.websocket.AuthenticationException;
@@ -29,15 +28,13 @@ public class CustomerService {
 		return true;
 	}
 
-	public boolean authenticate(String email, String password) throws AuthenticationException {
-		repository.findByEmail(email)
-				.map(customer -> security.verifyPassword(password, customer.getPasswordHash()))
+	public Customer authenticate(String email, String password) throws AuthenticationException {
+		return repository.findByEmail(email)
+				.filter(customer -> security.verifyPassword(password, customer.getPasswordHash()))
 				.orElseThrow(() -> new AuthenticationException("User not found"));
-
-		return true;
 	}
 
-	public boolean update(Long customerId, UpdatedCustomerDTO updatedCustomer) throws CustomerNotFoundException, UsernameAlreadyExistsException, EmailAlreadyExistsException {
+	public boolean update(Long customerId, CustomerDTO updatedCustomer) throws CustomerNotFoundException, UsernameAlreadyExistsException, EmailAlreadyExistsException {
 		var existingCustomer = repository.findById(customerId)
 				.orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + customerId));
 
