@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription − Pay My Buddy</title>
     <link rel="stylesheet" th:href="@{/css/register.css}" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
@@ -12,17 +13,18 @@
 
     <button class="btn btn-secondary">Pay My Buddy</button>
 
-    <div class="input-field">
-        <input type="text" placeholder="Username">
-    </div>
-    <div class="input-field">
-        <input type="email" placeholder="Mail">
-    </div>
-    <div class="input-field">
-        <input type="password" placeholder="Mot de passe">
-    </div>
-
-    <button class="btn btn-primary">S’inscrire</button>
+    <form th:action="@{/register}" th:object="${newCustomer}" method="post">
+        <div class="input-field">
+            <input type="text" th:field="*{username}" placeholder="Username">
+        </div>
+        <div class="input-field">
+            <input type="email" th:field="*{email}" placeholder="Mail">
+        </div>
+        <div class="input-field">
+            <input type="password" th:field="*{password}" placeholder="Mot de passe">
+        </div>
+        <button class="btn btn-primary" type="submit">S’inscrire</button>
+    </form>
 
     <div class="register-icon"></div>
 </div>

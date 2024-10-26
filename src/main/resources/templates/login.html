@@ -14,16 +14,16 @@
 
     <button class="btn btn-secondary">Pay My Buddy</button>
 
-    <div class="input-field">
-        <input type="text" placeholder="Mail">
-    </div>
-    <div class="input-field">
-        <input type="password" placeholder="Mot de passe">
-    </div>
+    <form th:action="@{/login}" th:object="${customer}" method="post">
+        <div class="input-field">
+            <input type="text" th:field="*{email}" placeholder="Mail">
+        </div>
+        <div class="input-field">
+            <input type="password" th:field="*{password}" placeholder="Mot de passe">
+        </div>
 
-    <button class="btn btn-primary">Se connecter</button>
-
-    <div class="login-icon"></div>
+        <button type="submit" class="btn btn-primary">Se connecter</button>
+    </form>
 </div>
 <!--<script>-->
 <!--	document.querySelector('form').addEventListener('submit', function (e) {-->
