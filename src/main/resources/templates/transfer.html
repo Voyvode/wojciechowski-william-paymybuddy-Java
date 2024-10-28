@@ -15,7 +15,7 @@
             <a href="transfer" class="nav-item active">Transférer</a>
             <a href="profile" class="nav-item">Profil</a>
             <a href="search" class="nav-item">Ajouter relation</a>
-            <a href="#" class="nav-item">Se déconnecter</a>
+            <a href="logout" class="nav-item">Se déconnecter</a>
         </nav>
     </header>
 
@@ -34,30 +34,50 @@
         <button type="submit" class="btn-transfer">Payer</button>
     </form>
 
-    <div class="transfer-table">
-        <div class="table-header">
-            <span>Relations</span>
-            <span>Description</span>
-            <span>Montant</span>
-        </div>
-        <div class="table-body">
-            <div class="table-row">
-                <span class="table-cell">Laure-Anne</span>
-                <span class="table-cell">Restaurant</span>
-                <span class="table-cell">10€</span>
-            </div>
-            <div class="table-row">
-                <span class="table-cell">Clara</span>
-                <span class="table-cell">Voyage</span>
-                <span class="table-cell">25€</span>
-            </div>
-            <div class="table-row">
-                <span class="table-cell">Luc</span>
-                <span class="table-cell">Billets de cinéma</span>
-                <span class="table-cell">8€</span>
-            </div>
-        </div>
-    </div>
+<!--    <div class="transfer-table">-->
+<!--        <div class="table-header">-->
+<!--            <span>Relations</span>-->
+<!--            <span>Description</span>-->
+<!--            <span>Montant</span>-->
+<!--        </div>-->
+<!--        <div class="table-body">-->
+<!--            <div class="table-row">-->
+<!--                <span class="table-cell">Laure-Anne</span>-->
+<!--                <span class="table-cell">Restaurant</span>-->
+<!--                <span class="table-cell">10€</span>-->
+<!--            </div>-->
+<!--            <div class="table-row">-->
+<!--                <span class="table-cell">Clara</span>-->
+<!--                <span class="table-cell">Voyage</span>-->
+<!--                <span class="table-cell">25€</span>-->
+<!--            </div>-->
+<!--            <div class="table-row">-->
+<!--                <span class="table-cell">Luc</span>-->
+<!--                <span class="table-cell">Billets de cinéma</span>-->
+<!--                <span class="table-cell">8€</span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <section class="transfer-history">
+        <table class="transfer-table">
+            <thead class="table-header">
+            <tr>
+                <th>Date</th>
+                <th>Destinataire</th>
+                <th>Montant</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody class="table-body">
+            <tr class="table-row" th:each="transfer : ${transfers}">
+                <td class="table-cell" th:text="${transfer.getReceiver().getUsername()}"></td>
+                <td class="table-cell" th:text="${#numbers.formatDecimal(transfer.amount, 1, 2)} + ' €'"></td>
+                <td class="table-cell" th:text="${transfer.description}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
 </div>
 </body>
 </html>
