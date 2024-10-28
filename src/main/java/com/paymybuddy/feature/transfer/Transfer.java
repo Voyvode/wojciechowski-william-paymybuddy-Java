@@ -21,11 +21,11 @@ public class Transfer {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(nullable = false, name = "sender")
+	@JoinColumn(nullable = false, name = "sender_id")
 	private Customer sender;
 
 	@ManyToOne
-	@JoinColumn(nullable = false, name = "receiver")
+	@JoinColumn(nullable = false, name = "receiver_id")
 	private Customer receiver;
 
 	@Column

@@ -1,10 +1,17 @@
 package com.paymybuddy.feature.transfer;
 
+import com.paymybuddy.core.exceptions.CustomerNotFoundException;
+import com.paymybuddy.feature.customer.CustomerDTO;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Collections;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -13,6 +20,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class TransferController {
 
 	private final TransferService service;
+
+	@GetMapping("/transfer")
+	public String showTransferPage(Model model, HttpSession session) throws CustomerNotFoundException {
+		session.setAttribute("customer", CustomerDTO.builder().email("bernard@mail.com").username("nanard").build()); // TODO: supprimer ce vilain traficotage de session
+
+		log.info("Entering /transfer endpoint");
+		log.info("Session ID: {}", session.getId());
+		log.info("Session attributes: {}", Collections.list(session.getAttributeNames()));
+
+		if (!isCustomerLoggedIn(session)) {
+			log.warn("Customer is not logged in, redirect to login page");
+			return "redirect:/login";
+		}
+		CustomerDTO customer = (CustomerDTO) session.getAttribute("customer");
+		List<Transfer> transfers = service.getTransfersForCustomer(customer.getUsername());
+
+		model.addAttribute("transfers", transfers);
+		return "transfer";
+	}
 
 //	@PostMapping
 //	public ResponseEntity<Void> createTransfer(
@@ -33,20 +59,8 @@ public class TransferController {
 //		}
 //	}
 
-	@GetMapping("/transfer")
-	public String showTransfer() {
-		return "transfer";
+	private boolean isCustomerLoggedIn(HttpSession session) {
+		return session.getAttribute("customer") != null;
 	}
-
-//	@GetMapping
-//	public ResponseEntity<List<Transfer>> getTransfers(@RequestParam Long customerId) {
-//		try {
-//			List<Transfer> transfers = service.getTransfers(customerId);
-//			return ResponseEntity.ok(transfers);
-//		} catch (CustomerNotFoundException e) {
-//			log.info("Customer {} not found", customerId);
-//			return ResponseEntity.notFound().build();
-//		}
-//	}
 
 }

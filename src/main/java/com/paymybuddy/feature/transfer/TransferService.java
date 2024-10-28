@@ -12,8 +12,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TransferService {
 
-	TransferRepository transferRepo;
-	CustomerRepository customerRepo;
+	private final TransferRepository transferRepo;
+	private final CustomerRepository customerRepo;
 
 	public void createTransfer(Long senderId, Long receiverId, BigDecimal amount, String description) throws CustomerNotFoundException {
 		var transfer = new Transfer();
@@ -25,12 +25,11 @@ public class TransferService {
 		transferRepo.save(transfer);
 	}
 
-	public List<Transfer> getTransfers(Long customerId) throws CustomerNotFoundException {
-		if (!customerRepo.existsById(customerId)) {
-			throw new CustomerNotFoundException("Customer with id " + customerId + " not found");
+	public List<Transfer> getTransfersForCustomer(String customerUsername) throws CustomerNotFoundException {
+		if (!customerRepo.existsByUsername(customerUsername)) {
+			throw new CustomerNotFoundException("Customer with id " + customerUsername + " not found");
 		}
 
-//		return transferRepo.findAllBySender(customerId);
-		return null;
+		return transferRepo.findAllTransfersForCustomer(customerUsername);
 	}
 }
