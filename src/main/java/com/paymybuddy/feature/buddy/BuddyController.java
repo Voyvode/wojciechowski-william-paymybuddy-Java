@@ -1,6 +1,7 @@
 package com.paymybuddy.feature.buddy;
 
 import com.paymybuddy.core.exceptions.CustomerNotFoundException;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -50,5 +51,9 @@ public class BuddyController {
 //			return ResponseEntity.notFound().build();
 //		}
 //	}
+
+	private boolean isCustomerLoggedIn(HttpSession session) {
+		return session.getAttribute("customer") != null;
+	}
 
 }

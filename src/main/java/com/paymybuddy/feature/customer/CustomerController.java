@@ -14,6 +14,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Enumeration;
+
 /**
  * Controller for managing customers.
  */
@@ -47,7 +49,7 @@ public class CustomerController {
 		if (registered) {
 			log.info("New customer '{}' registered with email '{}'", newCustomer.getUsername(), newCustomer.getEmail());
 			redirectAttributes.addFlashAttribute("message", "Registration successful");
-			return "redirect:/login"; //TODO: Rediriger vers transfer
+			return "redirect:/transfer";
 		} else {
 			log.info("Username '{}' or email '{}' already used", newCustomer.getUsername(), newCustomer.getEmail());
 			result.rejectValue("username", "error.user", "Username or email already in use");
@@ -57,22 +59,30 @@ public class CustomerController {
 
 	// TODO: Méthode temporaire pour afficher le formulaire de connexion sans Spring Security
 	@GetMapping("/login")
-	public String showLoginForm(Model model) {
+	public String showLoginForm(Model model, HttpSession session) {
+		if (isCustomerLoggedIn(session)) {
+			log.info("User '{}' already logged in, redirect", session.getAttribute("username"));
+			return "redirect:/transfer";
+		}
+
 		model.addAttribute("customer", CustomerDTO.builder().build());
+		log.info("Show login form");
 		return "login";
 	}
 
-	// TODO: Méthode temporaire pour traiter la connexion Spring Security
+	// TODO: Méthode temporaire pour traiter la connexion sans Spring Security
 	@PostMapping("/login")
 	public String login(@ModelAttribute CustomerDTO customerDTO, Model model) throws AuthenticationException {
+		log.info("Authentication try to {}", customerDTO.getEmail());
 		Customer authenticatedCustomer = service.authenticate(customerDTO.getEmail(), customerDTO.getPassword());
 
 		if (authenticatedCustomer != null) {
 			model.addAttribute("customer", authenticatedCustomer);
-			return "profile"; // Affiche la page de profil avec les infos du client
+			log.info("{} ({}) is authenticated, redirect to transfer", authenticatedCustomer.getEmail(), authenticatedCustomer.getUsername());
+			return "redirect:/transfer"; // TODO: "redirect:/transfer" ou "transfer"
 		} else {
 			model.addAttribute("error", "Invalid username or password");
-			return "login"; // Retourne au formulaire de connexion en cas d'erreur
+			return "login";
 		}
 	}
 
@@ -81,33 +91,19 @@ public class CustomerController {
 	 */
 	@GetMapping("/profile")
 	public String showProfile(Model model, HttpSession session) {
-		Customer customer = (Customer) session.getAttribute("customer");
-		if (customer == null) {
+		session.setAttribute("email", "bernard@mail.com");// TODO: supprimer ce vilain traficotage de session
+		session.setAttribute("username", "nanard");// TODO: supprimer ce vilain traficotage de session
+
+		if (!isCustomerLoggedIn(session)) {
 			return "redirect:/login";
 		}
-		model.addAttribute("customer", customer);
+
+		model.addAttribute("customer", session.getAttribute("customer"));
 		return "profile";
 	}
 
-//	/**
-//	 * Authenticates a customer.
-//	 *
-//	 * @param customer the registered customer to retrieve
-//	 * @return true if authentication was successful, false otherwise
-//	 * @throws AuthenticationException if authentication fails
-//	 */
-//	public boolean authenticate(@RequestBody CustomerDTO customer) throws AuthenticationException {
-//		boolean authenticated = service.authenticate(customer.getEmail(), customer.getPassword());
-//		if (authenticated) {
-//			log.info("Customer {} sign in", customer.getEmail());
-//		} else {
-//			log.info("Customer {} doesn't exist or wrong password", customer.getEmail());
-//		}
-//
-//		return authenticated;
-//	}
-
 	/**
+	 * //TODO: À remanier
 	 * Updates a customer's information.
 	 *
 	 * @param customerId the ID of the customer to update
@@ -117,6 +113,7 @@ public class CustomerController {
 	 * @throws EmailAlreadyExistsException if the new email is already in use
 	 * @throws CustomerNotFoundException if the customer is not found
 	 */
+	@PostMapping("/profile")
 	public boolean update(@PathVariable Long customerId, @RequestBody CustomerDTO updatedCustomer)
 			throws UsernameAlreadyExistsException, EmailAlreadyExistsException, CustomerNotFoundException {
 		boolean updated = service.update(customerId, updatedCustomer);
@@ -129,5 +126,23 @@ public class CustomerController {
 		return updated;
 	}
 
-}
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/login";
+	}
 
+	private boolean isCustomerLoggedIn(HttpSession session) {
+		Enumeration<String> attributeNames = session.getAttributeNames();
+
+		System.out.println("Contenu de la session :");
+
+		while (attributeNames.hasMoreElements()) {
+			String attributeName = attributeNames.nextElement();
+			Object attributeValue = session.getAttribute(attributeName);
+			System.out.println(attributeName + " : " + attributeValue);
+		}
+		return session.getAttribute("customer") != null;
+	}
+
+}
