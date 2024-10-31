@@ -1,6 +1,5 @@
 package com.paymybuddy.feature.buddy;
 
-import com.paymybuddy.core.exceptions.CustomerNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +26,9 @@ public class BuddyController {
 			service.addBuddy(customerId, buddyId);
 			log.info("Customer {} add {} successfully", customerId, buddyId);
 			return ResponseEntity.ok().build();
-		} catch (CustomerNotFoundException e) {
-			log.info("Customer {} or {} not found", customerId, buddyId);
-			return ResponseEntity.notFound().build();
+//		} catch (CustomerNotFoundException e) {
+//			log.info("Customer {} or {} not found", customerId, buddyId);
+//			return ResponseEntity.notFound().build();
 		} catch (IllegalArgumentException e) {
 			log.info("Customer {} already added {}", customerId, e.getMessage());
 			return ResponseEntity.status(CONFLICT).build();

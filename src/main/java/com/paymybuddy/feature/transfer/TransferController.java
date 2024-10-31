@@ -1,6 +1,5 @@
 package com.paymybuddy.feature.transfer;
 
-import com.paymybuddy.core.exceptions.CustomerNotFoundException;
 import com.paymybuddy.feature.customer.CustomerDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class TransferController {
 	private final TransferService service;
 
 	@GetMapping("/transfer")
-	public String showTransferPage(Model model, HttpSession session) throws CustomerNotFoundException {
+	public String showTransferPage(Model model, HttpSession session) {
 		session.setAttribute("customer", CustomerDTO.builder().email("bernard@mail.com").username("nanard").build()); // TODO: supprimer ce vilain traficotage de session
 
 		log.info("Entering /transfer endpoint");

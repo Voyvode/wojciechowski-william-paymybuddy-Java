@@ -1,11 +1,11 @@
 package com.paymybuddy.feature.buddy;
 
-import com.paymybuddy.core.exceptions.CustomerNotFoundException;
 import com.paymybuddy.feature.customer.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -14,12 +14,12 @@ public class BuddyService {
 	private final BuddyRepository buddyRepo;
 	private final CustomerRepository customerRepo;
 
-	public void addBuddy(Long customerId, Long otherCustomerId) throws CustomerNotFoundException, IllegalArgumentException {
+	public void addBuddy(Long customerId, Long otherCustomerId) {
 		if (!customerRepo.existsById(customerId)) {
-			throw new CustomerNotFoundException("Customer not found");
+			throw new IllegalArgumentException("Customer not found"); // TODO: Exception plus adaptée + contexte
 		}
-		if (!customerRepo.existsById(otherCustomerId)) {
-			throw new CustomerNotFoundException("Buddy not found");
+		if (!customerRepo.existsById(otherCustomerId)) { // TODO: Exception plus adaptée + contexte
+			throw new IllegalArgumentException("Buddy not found");
 		}
 
 		if (customerId.equals(otherCustomerId)) {
@@ -39,9 +39,9 @@ public class BuddyService {
 		buddyRepo.save(buddy);
 	}
 
-	public List<String> getBuddies(Long customerId) throws CustomerNotFoundException {
+	public List<String> getBuddies(Long customerId) { // TODO: Exception plus adaptée + contexte
 		if (!customerRepo.existsById(customerId)) {
-			throw new CustomerNotFoundException("Customer with id " + customerId + " not found");
+			throw new NoSuchElementException("Customer with id " + customerId + " not found");
 		}
 
 		return buddyRepo.findBuddyUsernamesByCustomerId(customerId);

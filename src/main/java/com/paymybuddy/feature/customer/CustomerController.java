@@ -1,8 +1,5 @@
 package com.paymybuddy.feature.customer;
 
-import com.paymybuddy.core.exceptions.CustomerNotFoundException;
-import com.paymybuddy.core.exceptions.EmailAlreadyExistsException;
-import com.paymybuddy.core.exceptions.UsernameAlreadyExistsException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -109,13 +106,9 @@ public class CustomerController {
 	 * @param customerId the ID of the customer to update
 	 * @param updatedCustomer the updated customer information
 	 * @return true if update was successful, false if customer not found
-	 * @throws UsernameAlreadyExistsException if the new username is already in use
-	 * @throws EmailAlreadyExistsException if the new email is already in use
-	 * @throws CustomerNotFoundException if the customer is not found
 	 */
 	@PostMapping("/profile")
-	public boolean update(@PathVariable Long customerId, @RequestBody CustomerDTO updatedCustomer)
-			throws UsernameAlreadyExistsException, EmailAlreadyExistsException, CustomerNotFoundException {
+	public boolean update(@PathVariable Long customerId, @RequestBody CustomerDTO updatedCustomer) {
 		boolean updated = service.update(customerId, updatedCustomer);
 		if (updated) {
 			log.info("Customer {} updated successfully", customerId);
