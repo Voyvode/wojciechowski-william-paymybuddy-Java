@@ -1,15 +1,18 @@
 package com.paymybuddy.feature.transfer;
 
-import com.paymybuddy.feature.customer.CustomerDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -22,45 +25,52 @@ public class TransferController {
 	private final TransferService service;
 
 	@GetMapping("/transfer")
-	public String showTransferPage(Model model, HttpSession session) {
-		session.setAttribute("customer", CustomerDTO.builder().email("bernard@mail.com").username("nanard").build()); // TODO: supprimer ce vilain traficotage de session
-
-		log.info("Entering /transfer endpoint");
-		log.info("Session ID: {}", session.getId());
-		log.info("Session attributes: {}", Collections.list(session.getAttributeNames()));
-
-		if (!isCustomerLoggedIn(session)) {
+	public String displayTransferPage(Model model, HttpSession session, HttpServletRequest request) {
+		if (!isCustomerLoggedIn(request)) {
 			log.warn("Customer is not logged in, redirect to login page");
 			return "redirect:/login";
 		}
-		CustomerDTO customer = (CustomerDTO) session.getAttribute("customer");
-		List<Transfer> transfers = service.getTransfersForCustomer(customer.getUsername());
+
+		var username = session.getAttribute("username").toString();
+		List<Transfer> transfers = service.getTransfersForCustomer(username);
 
 		model.addAttribute("transfers", transfers);
+		log.info("Displaying transfer page");
 		return "transfer";
 	}
 
-//	@PostMapping
-//	public ResponseEntity<Void> createTransfer(
-//			@RequestParam Long senderId,
-//			@RequestParam Long receiverId,
-//			@RequestParam @Positive @DecimalMax("1000.00") BigDecimal amount,
-//			@RequestParam(required = false) String description) { // TODO: Passer par un DTO
-//		try {
-//			service.createTransfer(senderId, receiverId, amount, description);
-//			log.info("Transfer of {} from customer {} to {} created successfully", amount, senderId, receiverId);
-//			return ResponseEntity.ok().build();
-//		} catch (CustomerNotFoundException e) {
-//			log.info("Customer {} or {} not found", senderId, receiverId);
-//			return ResponseEntity.notFound().build();
-//		} catch (IllegalArgumentException e) {
-//			log.info("Invalid transfer request: {}", e.getMessage());
-//			return ResponseEntity.badRequest().build();
-//		}
-//	}
+	/**
+	 * TODO: Pas encore opérationnel
+	 *
+	 * @param newTransfer
+	 * @param result
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@PostMapping("/transfer/x")
+	public String createTransfer(@ModelAttribute @Validated TransferDTO newTransfer, BindingResult result, RedirectAttributes redirectAttributes) {
+		try {
+			service.createTransfer(newTransfer.getSenderUsername(), newTransfer.getReceiverUsername(), newTransfer.getAmount(), newTransfer.getDescription());
+			log.info("{} sent {}€ to {}", newTransfer.getSenderUsername(), newTransfer.getAmount(), newTransfer.getReceiverUsername());
+			return "redirect:/transfer";
+		} catch (NoSuchElementException e) {
+			log.info("Customer {} or {} not found", newTransfer.getSenderUsername(), newTransfer.getReceiverUsername());
+			return "redirect:/transfer";
+		} catch (IllegalArgumentException e) {
+			log.info("Invalid transfer request: {}", e.getMessage());
+			return "redirect:/transfer";
+		}
+	}
 
-	private boolean isCustomerLoggedIn(HttpSession session) {
-		return session.getAttribute("customer") != null;
+	/**
+	 * Checks if the customer is currently logged in.
+	 *
+	 * @param request the HTTP request object
+	 * @return true if the customer is logged in, false otherwise
+	 */
+	private boolean isCustomerLoggedIn(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		return session != null && session.getAttribute("email") != null;
 	}
 
 }

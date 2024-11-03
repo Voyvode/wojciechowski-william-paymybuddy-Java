@@ -1,6 +1,5 @@
 package com.paymybuddy.feature.customer;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -25,29 +26,38 @@ public class CustomerController {
 
 	/**
 	 * Displays the registration form.
+	 *
+	 * @param model the model holding attributes for the view
+	 * @return the name of the view to render
 	 */
 	@GetMapping("/register")
-	public String showRegistrationForm(Model model) {
+	public String displayRegistrationForm(Model model) {
 		model.addAttribute("newCustomer", CustomerDTO.builder().build());
 		return "register";
 	}
 
 	/**
 	 * Processes the registration of a new customer.
+	 *
+	 * @param newCustomer the new customer information
+	 * @param result the binding result for validation
+	 * @param redirectAttributes the redirect attributes for flash messages
+	 * @return the name of the view to render
 	 */
 	@PostMapping("/register")
 	public String register(@ModelAttribute @Validated CustomerDTO newCustomer, BindingResult result, RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
-			log.error("Invalid form"); //TODO: log plus de détaillé
+			log.error("Registration form has errors: {}", result.getAllErrors());
 			return "register";
 		}
+
 		boolean registered = service.register(newCustomer.getUsername(), newCustomer.getEmail(), newCustomer.getPassword());
 		if (registered) {
 			log.info("New customer '{}' registered with email '{}'", newCustomer.getUsername(), newCustomer.getEmail());
-			redirectAttributes.addFlashAttribute("message", "Registration successful");
-			return "redirect:/transfer";
+			redirectAttributes.addFlashAttribute("message", "Registration successful, now please login");
+			return "redirect:/login";
 		} else {
-			log.info("Username '{}' or email '{}' already used", newCustomer.getUsername(), newCustomer.getEmail());
+			log.warn("Username '{}' or email '{}' already used", newCustomer.getUsername(), newCustomer.getEmail());
 			result.rejectValue("username", "error.user", "Username or email already in use");
 			return "register";
 		}
@@ -55,49 +65,62 @@ public class CustomerController {
 
 	/**
 	 * Displays the customer's profile.
+	 *
+	 * <p>Redirects to the login page if the customer is not logged in.
+	 *
+	 * @param model the model to hold attributes for the view
+	 * @param request the HTTP request object
+	 * @return the name of the view to render
 	 */
 	@GetMapping("/profile")
-	public String showProfile(Model model, HttpServletRequest request) {
+	public String displayProfile(Model model, HttpServletRequest request) {
 		if (!isCustomerLoggedIn(request)) {
 			return "redirect:/login";
 		}
 
 		HttpSession session = request.getSession(false);
-		model.addAttribute("customer", session.getAttribute("customer"));
+		model.addAttribute("username", session.getAttribute("username"));
+		model.addAttribute("email", session.getAttribute("email"));
+		log.info("Displaying profile for customer: {}", session.getAttribute("email"));
 		return "profile";
 	}
 
 	/**
-	 * //TODO: À remanier
-	 * Updates a customer's information.
+	 * Changes the customer's password.
 	 *
-	 * @param customerId the ID of the customer to update
-	 * @param updatedCustomer the updated customer information
-	 * @return true if update was successful, false if customer not found
+	 * @param updatedCustomer the updated customer information containing the new password
+	 * @param redirectAttributes the redirect attributes for flash messages
+	 * @return the redirect URL after updating
 	 */
 	@PostMapping("/profile")
-	public boolean update(@PathVariable Long customerId, @RequestBody CustomerDTO updatedCustomer) {
-		boolean updated = service.update(customerId, updatedCustomer);
-		if (updated) {
-			log.info("Customer {} updated successfully", customerId);
-		} else {
-			log.info("Customer {} not found", customerId);
+	public String changePassword(@ModelAttribute CustomerDTO updatedCustomer, RedirectAttributes redirectAttributes, HttpSession session, HttpServletRequest request) {
+		if (isCustomerLoggedIn(request)) {
+			log.warn("Update password failed: customer not logged in.");
+			redirectAttributes.addFlashAttribute("error", "You must be logged in to update your password.");
+			return "redirect:/login";
 		}
 
-		return updated;
+		boolean updated = service.changePassword(updatedCustomer.getEmail(), updatedCustomer.getPassword()); // TODO: obtenir le nouveau MDP du formulaire
+		if (updated) {
+			log.info("Password for customer {} updated successfully", updatedCustomer.getEmail());
+			redirectAttributes.addFlashAttribute("message", "Password updated successfully");
+			return "redirect:/profile";
+		} else {
+			log.error("Failed to update password for customer {}", updatedCustomer.getEmail());
+			redirectAttributes.addFlashAttribute("error", "Failed to update password. Please try again.");
+			return "redirect:/profile";
+		}
 	}
 
+	/**
+	 * Checks if a customer is currently logged in.
+	 *
+	 * @param request the HTTP request object
+	 * @return true if the customer is logged in, false otherwise
+	 */
 	private boolean isCustomerLoggedIn(HttpServletRequest request) {
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("JSESSIONID")) {
-					HttpSession session = request.getSession(false);
-					return session != null && session.getAttribute("customer") != null;
-				}
-			}
-		}
-		return false;
+		HttpSession session = request.getSession(false);
+		return session != null && session.getAttribute("email") != null;
 	}
 
 }

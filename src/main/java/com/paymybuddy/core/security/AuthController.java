@@ -63,12 +63,13 @@ public class AuthController {
 			var authenticatedCustomer = customerService.authenticate(customerDTO.getEmail(), customerDTO.getPassword());
 
 			if (authenticatedCustomer != null) {
+				session.setAttribute("username", authenticatedCustomer.getUsername());
 				session.setAttribute("email", authenticatedCustomer.getEmail());
 
 				var sessionCookie = new Cookie("JSESSIONID", session.getId());
 				sessionCookie.setMaxAge(30 * 60); // 30 minutes
 				sessionCookie.setPath("/");
-				sessionCookie.setHttpOnly(true);
+				sessionCookie.setSecure(true);
 				response.addCookie(sessionCookie);
 
 				log.info("{} logged in, redirecting to transfer page", authenticatedCustomer.getEmail());
@@ -116,7 +117,7 @@ public class AuthController {
 	 */
 	private boolean isCustomerLoggedIn(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
-		return session != null && session.getAttribute("customer") != null;
+		return session != null && session.getAttribute("email") != null;
 	}
 
 }
