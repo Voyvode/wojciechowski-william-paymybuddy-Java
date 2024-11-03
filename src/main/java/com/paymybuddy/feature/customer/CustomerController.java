@@ -1,17 +1,16 @@
 package com.paymybuddy.feature.customer;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Enumeration;
 
 /**
  * Controller for managing customers.
@@ -54,47 +53,16 @@ public class CustomerController {
 		}
 	}
 
-	// TODO: Méthode temporaire pour afficher le formulaire de connexion sans Spring Security
-	@GetMapping("/login")
-	public String showLoginForm(Model model, HttpSession session) {
-		if (isCustomerLoggedIn(session)) {
-			log.info("User '{}' already logged in, redirect", session.getAttribute("username"));
-			return "redirect:/transfer";
-		}
-
-		model.addAttribute("customer", CustomerDTO.builder().build());
-		log.info("Show login form");
-		return "login";
-	}
-
-	// TODO: Méthode temporaire pour traiter la connexion sans Spring Security
-	@PostMapping("/login")
-	public String login(@ModelAttribute CustomerDTO customerDTO, Model model) throws AuthenticationException {
-		log.info("Authentication try to {}", customerDTO.getEmail());
-		Customer authenticatedCustomer = service.authenticate(customerDTO.getEmail(), customerDTO.getPassword());
-
-		if (authenticatedCustomer != null) {
-			model.addAttribute("customer", authenticatedCustomer);
-			log.info("{} ({}) is authenticated, redirect to transfer", authenticatedCustomer.getEmail(), authenticatedCustomer.getUsername());
-			return "redirect:/transfer"; // TODO: "redirect:/transfer" ou "transfer"
-		} else {
-			model.addAttribute("error", "Invalid username or password");
-			return "login";
-		}
-	}
-
 	/**
 	 * Displays the customer's profile.
 	 */
 	@GetMapping("/profile")
-	public String showProfile(Model model, HttpSession session) {
-		session.setAttribute("email", "bernard@mail.com");// TODO: supprimer ce vilain traficotage de session
-		session.setAttribute("username", "nanard");// TODO: supprimer ce vilain traficotage de session
-
-		if (!isCustomerLoggedIn(session)) {
+	public String showProfile(Model model, HttpServletRequest request) {
+		if (!isCustomerLoggedIn(request)) {
 			return "redirect:/login";
 		}
 
+		HttpSession session = request.getSession(false);
 		model.addAttribute("customer", session.getAttribute("customer"));
 		return "profile";
 	}
@@ -119,23 +87,17 @@ public class CustomerController {
 		return updated;
 	}
 
-	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-		session.invalidate();
-		return "redirect:/login";
-	}
-
-	private boolean isCustomerLoggedIn(HttpSession session) {
-		Enumeration<String> attributeNames = session.getAttributeNames();
-
-		System.out.println("Contenu de la session :");
-
-		while (attributeNames.hasMoreElements()) {
-			String attributeName = attributeNames.nextElement();
-			Object attributeValue = session.getAttribute(attributeName);
-			System.out.println(attributeName + " : " + attributeValue);
+	private boolean isCustomerLoggedIn(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("JSESSIONID")) {
+					HttpSession session = request.getSession(false);
+					return session != null && session.getAttribute("customer") != null;
+				}
+			}
 		}
-		return session.getAttribute("customer") != null;
+		return false;
 	}
 
 }
