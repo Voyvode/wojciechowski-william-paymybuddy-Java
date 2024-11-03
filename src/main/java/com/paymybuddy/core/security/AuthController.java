@@ -23,6 +23,23 @@ public class AuthController {
 	private final CustomerService customerService;
 
 	/**
+	 * Handles the root URL redirection.
+	 *
+	 * <p>If the customer is authenticated, redirects to the transfer page.
+	 * Otherwise, redirects to the login page.
+	 *
+	 * @param request the HTTP request object
+	 * @return the redirect URL
+	 */
+	@GetMapping("/")
+	public String home(HttpServletRequest request) {
+		if (isCustomerLoggedIn(request)) {
+			return "redirect:/transfer";
+		}
+		return "redirect:/login";
+	}
+
+	/**
 	 * Displays the login form.
 	 *
 	 * <p>Redirects to the transfer page if the customer is logged in.
