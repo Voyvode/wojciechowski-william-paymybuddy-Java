@@ -1,4 +1,4 @@
-package com.paymybuddy.core.exceptions;
+package com.paymybuddy.core.error;
 
 import java.time.Instant;
 

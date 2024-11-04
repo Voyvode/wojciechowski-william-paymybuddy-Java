@@ -1,4 +1,4 @@
-package com.paymybuddy.core.exceptions;
+package com.paymybuddy.core.error;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ public class PayMyBuddyApiException extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<ApiError> handlerEntityNotFoundException(EntityNotFoundException ex) {
-		log.info("");
+		log.info("erreur 404");
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiError(404, ex.getMessage(), Instant.now()));
 	}
 
