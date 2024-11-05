@@ -1,3 +1,5 @@
+CREATE SCHEMA dev;
+
 CREATE TABLE customer
 (
 	id            SERIAL PRIMARY KEY,
