@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page de connexion ‑ PayMyBuddy</title>
-    <link rel="stylesheet" th:href="@{/css/login.css}" type="text/css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/login.css" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
 </head>
 <body>
-<!-- Section de Connexion -->
 <div class="login-page">
     <div class="login-frame"></div>
 
@@ -25,33 +24,5 @@
         <button type="submit" class="btn btn-primary">Se connecter</button>
     </form>
 </div>
-<!--<script>-->
-<!--	document.querySelector('form').addEventListener('submit', function (e) {-->
-<!--		e.preventDefault();-->
-
-<!--		const formData = {-->
-<!--			email: document.getElementById('email').value,-->
-<!--			password: document.getElementById('password').value-->
-<!--		};-->
-
-<!--		fetch('/api/customers/login', {-->
-<!--			method: 'POST',-->
-<!--			headers: {-->
-<!--				'Content-Type': 'application/json',-->
-<!--			},-->
-<!--			body: JSON.stringify(formData)-->
-<!--		})-->
-<!--			.then(response => {-->
-<!--				if (response.ok) {-->
-<!--					window.location.href = '/profile';  // Rediriger vers le tableau de bord après connexion réussie-->
-<!--				} else {-->
-<!--					alert('Échec de la connexion. Veuillez vérifier vos identifiants.');-->
-<!--				}-->
-<!--			})-->
-<!--			.catch(error => {-->
-<!--				console.error('Erreur:', error);-->
-<!--			});-->
-<!--	});-->
-<!--</script>-->
 </body>
 </html>

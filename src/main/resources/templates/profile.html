@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recherche - PayMyBuddy</title>
-    <link rel="stylesheet" th:href="@{/css/profile.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet"></head>
 <body>
 <div class="profile-page">
@@ -13,7 +13,7 @@
         <nav class="nav-items">
             <a href="transfer" class="nav-item">Transférer</a>
             <a href="profile" class="nav-item active">Profil</a>
-            <a href="search" class="nav-item">Ajouter relation</a>
+            <a href="add" class="nav-item">Ajouter relation</a>
             <a href="logout" class="nav-item">Se déconnecter</a>
         </nav>
     </header>
@@ -22,12 +22,12 @@
         <div class="profile-info">
             <div class="info-row">
                 <span class="info-label">Username</span>
-                <span class="info-value" th:text="${customer.username}">@username</span>
+                <span class="info-value" th:text="${username}">@username</span>
                 <span class="chevron-right">&#8250;</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Mail</span>
-                <span class="info-value" th:text="${customer.email}">nom@domain.com</span>
+                <span class="info-value" th:text="${email}">nom@domain.com</span>
                 <span class="chevron-right">&#8250;</span>
             </div>
             <div class="info-row">

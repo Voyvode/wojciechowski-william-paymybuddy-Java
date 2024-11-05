@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - PayMyBuddy</title>
-    <link rel="stylesheet" th:href="@{/css/search.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/search.css}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -14,15 +14,14 @@
         <nav class="nav-items">
             <a href="transfer" class="nav-item">Transférer</a>
             <a href="profile" class="nav-item">Profil</a>
-            <a href="add-buddy" class="nav-item active">Ajouter relation</a>
+            <a href="add" class="nav-item active">Ajouter relation</a>
             <a href="logout" class="nav-item">Se déconnecter</a>
         </nav>
     </header>
-
-    <form class="search-form">
+    <form class="search-form" th:action="@{/add}" method="post">
         <div class="input-group">
             <label for="search-relation" class="input-label">Chercher une relation</label>
-            <input type="text" id="search-relation" class="input-field" placeholder="Saisir une adresse mail">
+            <input type="text" name="buddyEmail" id="search-relation" class="input-field" placeholder="Saisir une adresse mail" required>
         </div>
         <button type="submit" class="btn-add">Ajouter</button>
     </form>

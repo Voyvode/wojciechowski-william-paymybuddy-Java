@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction - PayMyBuddy</title>
-    <link rel="stylesheet" th:href="@{/css/transfer.css}" type="text/css">
+    <link rel="stylesheet" href="/css/transfer.css" th:href="@{/css/transfer.css}" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -14,50 +14,27 @@
         <nav class="nav-items">
             <a href="transfer" class="nav-item active">Transférer</a>
             <a href="profile" class="nav-item">Profil</a>
-            <a href="search" class="nav-item">Ajouter relation</a>
+            <a href="add" class="nav-item">Ajouter relation</a>
             <a href="logout" class="nav-item">Se déconnecter</a>
         </nav>
     </header>
 
     <form class="transfer-form">
         <div class="dropdown">
-            <select>
+            <select name="buddyUsername">
                 <option value="" disabled selected>Sélectionner une relation</option>
-                <option value="laure-anne">Laure-Anne</option>
-                <option value="clara">Clara</option>
-                <option value="luc">Luc</option>
+                <option th:each="buddy : ${buddies}"
+                        th:value="${buddy.username}"
+                        th:text="${buddy.username}">
+                </option>
             </select>
         </div>
         <div class="input-field">
-            <input type="text" placeholder="Montant">
+            <input type="number" name="amount" placeholder="Montant" step="0.01" min="0" required>
         </div>
         <button type="submit" class="btn-transfer">Payer</button>
     </form>
 
-<!--    <div class="transfer-table">-->
-<!--        <div class="table-header">-->
-<!--            <span>Relations</span>-->
-<!--            <span>Description</span>-->
-<!--            <span>Montant</span>-->
-<!--        </div>-->
-<!--        <div class="table-body">-->
-<!--            <div class="table-row">-->
-<!--                <span class="table-cell">Laure-Anne</span>-->
-<!--                <span class="table-cell">Restaurant</span>-->
-<!--                <span class="table-cell">10€</span>-->
-<!--            </div>-->
-<!--            <div class="table-row">-->
-<!--                <span class="table-cell">Clara</span>-->
-<!--                <span class="table-cell">Voyage</span>-->
-<!--                <span class="table-cell">25€</span>-->
-<!--            </div>-->
-<!--            <div class="table-row">-->
-<!--                <span class="table-cell">Luc</span>-->
-<!--                <span class="table-cell">Billets de cinéma</span>-->
-<!--                <span class="table-cell">8€</span>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
 
     <section class="transfer-history">
         <table class="transfer-table">
