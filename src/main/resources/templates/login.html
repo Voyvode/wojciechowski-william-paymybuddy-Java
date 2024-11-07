@@ -1,28 +1,60 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page de connexion ‑ PayMyBuddy</title>
+    <title>Connexion ‑ PayMyBuddy</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="/css/login.css" type="text/css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
 </head>
 <body>
-<div class="login-page">
-    <div class="login-frame"></div>
+<div class="login-frame">
+    <img src="/images/logo-pmb.png" alt="Pay My Buddy" class="login-logo">
 
-    <button class="btn btn-secondary">Pay My Buddy</button>
-
-    <form th:action="@{/login}" th:object="${customer}" method="post">
+    <form class="login-form" th:action="@{/login}" th:object="${customer}" method="post">
         <div class="input-field">
-            <input type="text" th:field="*{email}" placeholder="Mail">
+            <label for="email">Email</label>
+            <input id="email" type="text" th:field="*{email}" placeholder="adresse@mail.com" required>
         </div>
         <div class="input-field">
-            <input type="password" th:field="*{password}" placeholder="Mot de passe">
+            <label for="password">Mot de passe</label>
+            <input id="password" type="password" th:field="*{password}" placeholder="Mot de passe" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Se connecter</button>
     </form>
+
+    <p>Pas encore de compte ? <a class="register-link" th:href="@{/register}">S’inscrire</a></p>
 </div>
 </body>
 </html>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="fr" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Page de connexion ‑ PayMyBuddy</title>-->
+<!--    <link rel="stylesheet" href="/css/login.css" type="text/css">-->
+<!--    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="login-frame">-->
+
+<!--    <button class="btn btn-secondary">Pay My Buddy</button>-->
+
+<!--    <form th:action="@{/login}" th:object="${customer}" method="post">-->
+<!--        <div class="input-field">-->
+<!--            <input type="text" th:field="*{email}" placeholder="Mail">-->
+<!--        </div>-->
+<!--        <div class="input-field">-->
+<!--            <input type="password" th:field="*{password}" placeholder="Mot de passe">-->
+<!--        </div>-->
+
+<!--        <button type="submit" class="btn btn-primary">Se connecter</button>-->
+<!--    </form>-->
+
+<!--    <a th:href="@{/register}">Inscription</a>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
