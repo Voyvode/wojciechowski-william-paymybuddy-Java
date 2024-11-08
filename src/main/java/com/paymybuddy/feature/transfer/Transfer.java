@@ -31,7 +31,7 @@ public class Transfer {
 	@Column
 	private String description;
 
-	@Column(precision = 4, scale = 2)
+	@Column(precision = 5, scale = 2)
 	@DecimalMin(value = "0.01", message = "amount must be strictly greater than 0")
 	@DecimalMax(value = "1000.00", message = "amount must not exceed 1,000")
 	private BigDecimal amount;
@@ -39,4 +39,11 @@ public class Transfer {
 	@Column(nullable = false)
 	Instant timestamp;
 
+	public Transfer(Customer sender, Customer receiver, BigDecimal amount, String description) {
+		this.sender = sender;
+		this.receiver = receiver;
+		this.amount = amount;
+		this.description = description;
+		this.timestamp = Instant.now();
+	}
 }

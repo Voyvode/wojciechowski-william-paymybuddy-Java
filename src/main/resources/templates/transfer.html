@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction - PayMyBuddy</title>
+    <title>Transférer - PayMyBuddy</title>
     <link rel="stylesheet" href="/css/transfer.css" th:href="@{/css/transfer.css}" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 </head>
@@ -19,9 +19,11 @@
         </nav>
     </header>
 
-    <form class="transfer-form">
+    <!-- Formulaire de transfert -->
+    <form class="transfer-form" th:action="@{/transfer}" th:object="${newTransfer}" method="post">
         <div class="dropdown">
-            <select name="buddyUsername">
+            <label for="receiver">Contact</label>
+            <select id="receiver" th:field="*{receiverUsername}">
                 <option value="" disabled selected>Sélectionner une relation</option>
                 <option th:each="buddy : ${buddies}"
                         th:value="${buddy.username}"
@@ -29,17 +31,25 @@
                 </option>
             </select>
         </div>
+
         <div class="input-field">
-            <input type="number" name="amount" placeholder="Montant" step="0.01" min="0" required>
+            <label for="amount">Mot de passe</label>
+            <input id="amount" type="number" th:field="*{amount}" placeholder="Montant" step="0.01" min="0" required>
         </div>
+
+        <div class="input-field">
+            <label for="description">Description</label>
+            <input id="description" type="text" th:field="*{description}" placeholder="Description">
+        </div>
+
         <button type="submit" class="btn-transfer">Payer</button>
     </form>
 
-
+    <!-- Historique -->
     <section class="transfer-history">
         <table class="transfer-table">
-            <thead class="table-header">
-            <tr>
+            <thead>
+            <tr class="table-header">
                 <th>Date</th>
                 <th>Destinataire</th>
                 <th>Montant</th>
@@ -48,6 +58,7 @@
             </thead>
             <tbody class="table-body">
             <tr class="table-row" th:each="transfer : ${transfers}">
+                <td class="table-cell" th:text="${transfer.getTimestamp()}"></td>
                 <td class="table-cell" th:text="${transfer.getReceiver().getUsername()}"></td>
                 <td class="table-cell" th:text="${#numbers.formatDecimal(transfer.amount, 1, 2)} + ' €'"></td>
                 <td class="table-cell" th:text="${transfer.description}"></td>
