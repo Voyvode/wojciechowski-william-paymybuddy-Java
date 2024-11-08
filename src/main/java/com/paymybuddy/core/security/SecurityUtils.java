@@ -1,7 +1,5 @@
 package com.paymybuddy.core.security;
 
-import org.springframework.stereotype.Service;
-
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -11,24 +9,19 @@ import java.util.Base64;
 
 /**
  * Security service for password hashing and verification.
- * Uses PBKDF2 with HMAC-SHA256 and random salting for security.
+ *
+ * <p>Uses PBKDF2 with HMAC-SHA256 and random salting for security.
  */
-@Service
-public class SecurityService {
+public final class SecurityUtils {
 
 	private static final int ITERATIONS = 65536;
 	private static final int KEY_LENGTH = 256;
 	private static final int SALT_LENGTH = 8;
 
-	private final SecureRandom secureRandom = new SecureRandom();
-	private final SecretKeyFactory secretKeyFactory;
+	private static final SecureRandom secureRandom = new SecureRandom();
+	private static final SecretKeyFactory secretKeyFactory;
 
-	/**
-	 * Initializes the service with PBKDF2WithHmacSHA256 algorithm.
-	 *
-	 * @throws IllegalStateException if the algorithm is unavailable.
-	 */
-	public SecurityService() {
+	static {
 		try {
 			secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 		} catch (NoSuchAlgorithmException e) {
@@ -42,7 +35,7 @@ public class SecurityService {
 	 * @param password the plain text password.
 	 * @return the salt and hash, Base64-encoded and separated by ":".
 	 */
-	public String hashPassword(String password) {
+	public static String hashPassword(String password) {
 		var salt = new byte[SALT_LENGTH];
 		secureRandom.nextBytes(salt);
 
@@ -57,7 +50,7 @@ public class SecurityService {
 	 * @return Base64-encoded salt and hash, separated by ":".
 	 * @throws IllegalArgumentException if the key spec is invalid.
 	 */
-	private String hashPassword(byte[] salt, String password) {
+	private static String hashPassword(byte[] salt, String password) {
 		var keySpec = new PBEKeySpec(password.toCharArray(), salt, ITERATIONS, KEY_LENGTH);
 		try {
 			byte[] hash = secretKeyFactory.generateSecret(keySpec).getEncoded();
@@ -74,7 +67,7 @@ public class SecurityService {
 	 * @param hashedPassword the hashed password with salt.
 	 * @return {@code true} if passwords match, {@code false} otherwise.
 	 */
-	public boolean verifyPassword(String plainTextPassword, String hashedPassword) {
+	public static boolean verifyPassword(String plainTextPassword, String hashedPassword) {
 		var parts = hashedPassword.split(":");
 		var salt = Base64.getDecoder().decode(parts[0]);
 

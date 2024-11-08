@@ -19,7 +19,7 @@ public class CustomerService {
 		if (customerRepo.existsByUsernameOrEmail(username, email)) {
 			throw new EntityExistsException("Customer with same username or email already exists");
 		}
-		var newCustomer = new Customer(username, email, securityService.hashPassword(password));
+		var newCustomer = new Customer(username, email, SecurityUtils.hashPassword(password));
 		customerRepo.save(newCustomer);
 		return true;
 	}
@@ -27,14 +27,14 @@ public class CustomerService {
 	// TODO: Mettre dans une nouvelle classe AuthService ? Fusionner avec SecurityService ?
 	public Customer authenticate(String email, String password) throws AuthenticationException {
 		return customerRepo.findByEmail(email)
-				.filter(customer -> securityService.verifyPassword(password, customer.getPasswordHash()))
+				.filter(customer -> SecurityUtils.verifyPassword(password, customer.getPasswordHash()))
 				.orElseThrow(() -> new AuthenticationException("Invalid email or password"));
 	}
 
 	public boolean changePassword(String customerUsername, String newPassword) {
 		var existingCustomer = customerRepo.findByUsername(customerUsername)
 				.orElseThrow(() -> new NoSuchElementException("Customer not found with username: " + customerUsername));
-		var newPasswordHash = securityService.hashPassword(newPassword);
+		var newPasswordHash = SecurityUtils.hashPassword(newPassword);
 		existingCustomer.setPasswordHash(newPasswordHash);
 		customerRepo.save(existingCustomer);
 		return true;
