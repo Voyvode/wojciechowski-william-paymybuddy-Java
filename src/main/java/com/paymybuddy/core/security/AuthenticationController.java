@@ -1,7 +1,7 @@
 package com.paymybuddy.core.security;
 
 import com.paymybuddy.feature.customer.CustomerDTO;
-import com.paymybuddy.feature.customer.CustomerService;
+import jakarta.persistence.EntityExistsException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,16 +11,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * AuthController handles customer authentication.
+ *
+ * <p>This class provides methods to display the login form, authenticate a customer,
+ * manage logout, and check if a customer is already logged in.
+ */
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-public class AuthController {
+public class AuthenticationController {
 
-	private final CustomerService customerService;
+	private final AuthenticationService authService;
 
 	/**
 	 * Handles the root URL redirection.
@@ -63,42 +72,37 @@ public class AuthController {
 	/**
 	 * Authenticates a customer using the provided credentials.
 	 *
-	 * <p>If authentication is successful, the user is redirected to the transfer page. Otherwise, an error message is
+	 * <p>If authentication is successful, the customer is redirected to the transfer page. Otherwise, an error message is
 	 * displayed on the login form.
 	 *
-	 * @param customerDTO the data transfer object containing customer credentials
+	 * @param dto the data transfer object containing customer credentials
 	 * @param model       the model to hold attributes for the view
 	 * @param session     the HTTP session object
 	 * @param response    the HTTP response object
 	 * @return the name of the view to render
 	 */
 	@PostMapping("/login")
-	public String login(@ModelAttribute CustomerDTO customerDTO, Model model, HttpSession session, HttpServletResponse response) {
-		log.info("Authentication attempt for {}", customerDTO.getEmail());
+	public String login(@ModelAttribute("customer") CustomerDTO dto, HttpSession session, HttpServletResponse response, Model model) {
+		log.info("Authentication attempt for {}", dto.getEmail());
 
 		try {
-			var authenticatedCustomer = customerService.authenticate(customerDTO.getEmail(), customerDTO.getPassword());
+			var authenticatedCustomer = authService.authenticate(dto.getEmail(), dto.getPassword());
+			session.setAttribute("username", authenticatedCustomer.getUsername());
+			session.setAttribute("email", authenticatedCustomer.getEmail());
 
-			if (authenticatedCustomer != null) {
-				session.setAttribute("username", authenticatedCustomer.getUsername());
-				session.setAttribute("email", authenticatedCustomer.getEmail());
+			var sessionCookie = new Cookie("JSESSIONID", session.getId());
+			sessionCookie.setMaxAge(30 * 60); // 30 minutes
+			sessionCookie.setPath("/");
+			sessionCookie.setHttpOnly(true);
+			sessionCookie.setSecure(true);
+			response.addCookie(sessionCookie);
 
-				var sessionCookie = new Cookie("JSESSIONID", session.getId());
-				sessionCookie.setMaxAge(30 * 60); // 30 minutes
-				sessionCookie.setPath("/");
-				sessionCookie.setSecure(true);
-				response.addCookie(sessionCookie);
+			log.info("{} logged in successfully", dto.getEmail());
+			return "redirect:/transfer";
 
-				log.info("{} logged in, redirecting to transfer page", authenticatedCustomer.getEmail());
-				return "redirect:/transfer";
-			} else {
-				model.addAttribute("error", "Invalid email or password");
-				log.warn("Authentication failed for {}", customerDTO.getEmail());
-				return "login";
-			}
 		} catch (AuthenticationException e) {
-			model.addAttribute("error", "Authentication error: " + e.getMessage());
-			log.error("Error during authentication for {}: {}", customerDTO.getEmail(), e.getMessage());
+			model.addAttribute("error", "Identification incorrecte. Réessayez.");
+			log.error("Error during authentication for {}: {}", dto.getEmail(), e.getMessage());
 			return "login";
 		}
 	}
@@ -127,13 +131,52 @@ public class AuthController {
 	}
 
 	/**
+	 * Displays the registration form.
+	 *
+	 * @param model the model holding attributes for the view
+	 * @return the name of the view to render
+	 */
+	@GetMapping("/register")
+	public String displayRegistrationForm(Model model) {
+		model.addAttribute("newCustomer", CustomerDTO.builder().build());
+		return "register";
+	}
+
+	/**
+	 * Processes the registration of a new customer.
+	 *
+	 * @param dto the new customer information
+	 * @param result the binding result for validation
+	 * @param redirectAttributes the redirect attributes for flash messages
+	 * @return the name of the view to render
+	 */
+	@PostMapping("/register")
+	public String register(@ModelAttribute @Validated CustomerDTO dto, BindingResult result, RedirectAttributes redirectAttributes) {
+		if (result.hasErrors()) {
+			log.error("Registration form has errors: {}", result.getAllErrors());
+			return "register";
+		}
+
+		try {
+			authService.register(dto.getUsername(), dto.getEmail(), dto.getPassword());
+			log.info("New customer '{}' registered with email '{}'", dto.getUsername(), dto.getEmail());
+			redirectAttributes.addFlashAttribute("message", "Registration successful, now please login");
+			return "redirect:/login";
+		} catch (EntityExistsException e) {
+			log.warn("Username '{}' or email '{}' already used", dto.getUsername(), dto.getEmail());
+			result.rejectValue("username", "error.user", "Username or email already in use");
+			return "register";
+		}
+	}
+
+	/**
 	 * Checks if a customer is currently logged in.
 	 *
 	 * @param request the HTTP request object
 	 * @return true if the customer is logged in, false otherwise
 	 */
 	private boolean isCustomerLoggedIn(HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
+		var session = request.getSession(false);
 		return session != null && session.getAttribute("email") != null;
 	}
 

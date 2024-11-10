@@ -1,16 +1,13 @@
 package com.paymybuddy.feature.customer;
 
-import jakarta.persistence.EntityExistsException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -25,46 +22,7 @@ import java.util.NoSuchElementException;
 @Validated
 public class CustomerController {
 
-	private final CustomerService service;
-
-	/**
-	 * Displays the registration form.
-	 *
-	 * @param model the model holding attributes for the view
-	 * @return the name of the view to render
-	 */
-	@GetMapping("/register")
-	public String displayRegistrationForm(Model model) {
-		model.addAttribute("newCustomer", CustomerDTO.builder().build());
-		return "register";
-	}
-
-	/**
-	 * Processes the registration of a new customer.
-	 *
-	 * @param dto the new customer information
-	 * @param result the binding result for validation
-	 * @param redirectAttributes the redirect attributes for flash messages
-	 * @return the name of the view to render
-	 */
-	@PostMapping("/register")
-	public String register(@ModelAttribute @Validated CustomerDTO dto, BindingResult result, RedirectAttributes redirectAttributes) {
-		if (result.hasErrors()) {
-			log.error("Registration form has errors: {}", result.getAllErrors());
-			return "register";
-		}
-
-		try {
-			service.register(dto.getUsername(), dto.getEmail(), dto.getPassword());
-			log.info("New customer '{}' registered with email '{}'", dto.getUsername(), dto.getEmail());
-			redirectAttributes.addFlashAttribute("message", "Registration successful, now please login");
-			return "redirect:/login";
-		} catch (EntityExistsException e) {
-			log.warn("Username '{}' or email '{}' already used", dto.getUsername(), dto.getEmail());
-			result.rejectValue("username", "error.user", "Username or email already in use");
-			return "register";
-		}
-	}
+	private final CustomerService customerService;
 
 	/**
 	 * Displays the customer's profile.
@@ -105,7 +63,7 @@ public class CustomerController {
 		HttpSession session = request.getSession(false);
 		var customerUsername = session.getAttribute("username").toString();
 		try {
-			service.changePassword(customerUsername, newPassword);
+			customerService.changePassword(customerUsername, newPassword);
 			log.info("Password for customer {} updated successfully", customerUsername);
 			redirectAttributes.addFlashAttribute("message", "Password updated successfully");
 			return "redirect:/profile";
@@ -145,7 +103,7 @@ public class CustomerController {
 	@PostMapping("/add")
 	public String addBuddy(String buddyEmail, HttpSession session) {
 		var customerUsername = session.getAttribute("username").toString();
-		var buddyUsername = service.customerAddBuddy(customerUsername, buddyEmail); // TODO: clarifier
+		var buddyUsername = customerService.addBuddy(customerUsername, buddyEmail); // TODO: clarifier
 		log.info("{} has added {} to buddy list", customerUsername, buddyUsername);
 		return "transfer";
 	}
