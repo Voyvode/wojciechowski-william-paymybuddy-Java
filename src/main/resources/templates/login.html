@@ -1,60 +1,31 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion ‑ PayMyBuddy</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
-    <link rel="stylesheet" href="/css/login.css" type="text/css">
+    <link rel="stylesheet" href="/css/buddy.css" th:href="@{/css/buddy.css}" type="text/css">
+    <title>Connexion ‑ Pay My Buddy</title>
 </head>
 <body>
-<div class="login-frame">
-    <img src="/images/logo-pmb.png" alt="Pay My Buddy" class="login-logo">
-
+<main class="login-frame">
+    <img src="/images/logo-pmb.svg" alt="Pay My Buddy" class="login-logo" aria-label="Logo de Pay My Buddy">
     <form class="login-form" th:action="@{/login}" th:object="${customer}" method="post">
+        <div class="wrong-login" th:if="${error != null}">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"></path></svg>
+            <p class="error-message" th:text="${error}"/>
+        </div>
         <div class="input-field">
-            <label for="email">Email</label>
-            <input id="email" type="text" th:field="*{email}" placeholder="adresse@mail.com" required>
+            <label for="email">E-mail</label>
+            <input id="email" type="text" th:field="*{email}" placeholder="adresse@mail.com" aria-required="true" required>
         </div>
         <div class="input-field">
             <label for="password">Mot de passe</label>
-            <input id="password" type="password" th:field="*{password}" placeholder="Mot de passe" required>
+            <input id="password" type="password" th:field="*{password}" placeholder="Mot de passe" aria-required="true" required>
         </div>
-
         <button type="submit" class="btn btn-primary">Se connecter</button>
     </form>
-
     <p>Pas encore de compte ? <a class="register-link" th:href="@{/register}">S’inscrire</a></p>
-</div>
+</main>
 </body>
 </html>
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="fr" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Page de connexion ‑ PayMyBuddy</title>-->
-<!--    <link rel="stylesheet" href="/css/login.css" type="text/css">-->
-<!--    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">-->
-<!--</head>-->
-<!--<body>-->
-<!--<div class="login-frame">-->
-
-<!--    <button class="btn btn-secondary">Pay My Buddy</button>-->
-
-<!--    <form th:action="@{/login}" th:object="${customer}" method="post">-->
-<!--        <div class="input-field">-->
-<!--            <input type="text" th:field="*{email}" placeholder="Mail">-->
-<!--        </div>-->
-<!--        <div class="input-field">-->
-<!--            <input type="password" th:field="*{password}" placeholder="Mot de passe">-->
-<!--        </div>-->
-
-<!--        <button type="submit" class="btn btn-primary">Se connecter</button>-->
-<!--    </form>-->
-
-<!--    <a th:href="@{/register}">Inscription</a>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->

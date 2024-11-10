@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription − Pay My Buddy</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
     <link rel="stylesheet" th:href="@{/css/register.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>Inscription − Pay My Buddy</title>
 </head>
 <body>
-<div class="register-page">
+<main class="register-page">
     <div class="register-frame"></div>
 
     <button class="btn btn-secondary">Pay My Buddy</button>
@@ -27,6 +27,8 @@
     </form>
 
     <div class="register-icon"></div>
-</div>
+
+    <a th:href="@{/login}">Connexion</a>
+</main>
 </body>
 </html>

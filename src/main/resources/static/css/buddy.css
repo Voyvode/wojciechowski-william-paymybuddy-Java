@@ -31,11 +31,9 @@ label {
     gap: 24px;
 }
 
-/* Logo */
 .login-logo {
-    width: 256px;
-    height: auto;
-    margin: 24px;
+    height: 256px;
+    margin: 16px;
 }
 
 .login-form {
@@ -61,6 +59,37 @@ label {
     font-weight: 700;
     font-size: 16px;
     color: #828282;
+}
+
+.wrong-login {
+    display: flex;
+    align-items: center;
+    background-color: #f8d7da;  /* Fond rouge clair pour l'erreur */
+    border: 1px solid #f5c6cb;  /* Bordure rose clair */
+    border-radius: 8px;
+    padding: 12px;
+    color: #6c1a1a;  /* Texte rouge foncé */
+    font-size: 14px;
+}
+
+.wrong-login .icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    fill: #6c1a1a;  /* Icône rouge foncé */
+}
+
+.wrong-login p {
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Icône pour le panonceau */
+.wrong-login svg {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    fill: #721c24;
 }
 
 /* Buttons */

@@ -1,30 +1,30 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription - PayMyBuddy</title>
-    <link rel="stylesheet" th:href="@{/css/search.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="/css/transfer.css" th:href="@{/css/transfer.css}" type="text/css">
+    <title>Ajouter un contact - Pay My Buddy</title>
 </head>
 <body>
-<div class="search-page">
+<main class="search-page">
     <header class="header">
-        <div class="logo">Pay My Buddy</div>
+        <img src="/images/logo-pmb-side.svg" alt="Pay My Buddy" class="logo" aria-label="Logo de Pay My Buddy">
         <nav class="nav-items">
-            <a href="transfer" class="nav-item">Transférer</a>
-            <a href="profile" class="nav-item">Profil</a>
-            <a href="add" class="nav-item active">Ajouter relation</a>
-            <a href="logout" class="nav-item">Se déconnecter</a>
+            <a th:href="@{/transfer}" class="nav-item">Transférer</a>
+            <a th:href="@{/add}" class="nav-item active">Ajouter un contact</a>
+            <a th:href="@{/profile}" class="nav-item">Profil</a>
+            <a th:href="@{/logout}" class="nav-item">Se déconnecter</a>
         </nav>
     </header>
     <form class="search-form" th:action="@{/add}" method="post">
         <div class="input-group">
-            <label for="search-relation" class="input-label">Chercher une relation</label>
-            <input type="text" name="buddyEmail" id="search-relation" class="input-field" placeholder="Saisir une adresse mail" required>
+            <label for="search-relation" class="input-label">Saisissez l’e-mail d’un contact pour l’ajouter à votre liste</label>
+            <input type="text" name="buddyEmail" id="search-relation" class="input-field" placeholder="E-mail du contact" required>
         </div>
         <button type="submit" class="btn-add">Ajouter</button>
     </form>
-</div>
+</main>
 </body>
 </html>
