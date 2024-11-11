@@ -31,10 +31,40 @@
             <div class="info-row">
                 <span class="info-label">Mot de passe</span>
                 <span class="info-value">••••••••</span>
-                <button class="btn-modify">Modifier</button>
+                <button id="modifyButton" class="btn-modify" onclick="togglePasswordForm()">Modifier</button>
             </div>
         </div>
+
+        <form th:action="@{/profile/change-password}" method="post" id="changePasswordForm" class="password-form" style="display: none;">
+            <div class="input-field">
+                <label for="oldPassword">Ancien mot de passe</label>
+                <input id="oldPassword" type="password" name="oldPassword" required>
+            </div>
+            <div class="input-field">
+                <label for="newPassword">Nouveau mot de passe</label>
+                <input id="newPassword" type="password" name="newPassword" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Confirmer</button>
+            <button type="button" onclick="togglePasswordForm()" class="btn btn-secondary">Annuler</button>
+
+            <p th:if="${message != null}" th:text="${message}" class="feedback-message"></p>
+        </form>
     </section>
 </main>
+
+<script>
+	function togglePasswordForm() {
+		const form = document.getElementById("changePasswordForm");
+		const modifyButton = document.getElementById("modifyButton");
+
+		if (form.style.display === "none") {
+			form.style.display = "block";
+			modifyButton.style.display = "none";
+		} else {
+			form.style.display = "none";
+			modifyButton.style.display = "inline";
+		}
+	}
+</script>
 </body>
 </html>

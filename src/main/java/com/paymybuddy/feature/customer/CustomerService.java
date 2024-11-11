@@ -12,10 +12,18 @@ public class CustomerService {
 
 	private final CustomerRepository customerRepo;
 
-	// TODO: check ancien mdp
-	public void changePassword(String customerUsername, String newPassword) {
+	public void changePassword(String customerUsername, String oldPassword, String newPassword) {
+		if (oldPassword == null || newPassword == null || newPassword.isBlank()) {
+			throw new IllegalArgumentException("Passwords must not be null or blank");
+		}
+
 		var existingCustomer = customerRepo.findByUsername(customerUsername)
 				.orElseThrow(() -> new NoSuchElementException("Customer not found with username: " + customerUsername));
+
+		if (!SecurityUtils.verifyPassword(oldPassword, existingCustomer.getPasswordHash())) {
+			throw new IllegalArgumentException("Old password does not match");
+		}
+
 		var newPasswordHash = SecurityUtils.hashPassword(newPassword);
 		existingCustomer.setPasswordHash(newPasswordHash);
 		customerRepo.save(existingCustomer);

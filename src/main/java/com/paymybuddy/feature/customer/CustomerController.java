@@ -53,9 +53,9 @@ public class CustomerController {
 	 * @param redirectAttributes the redirect attributes for flash messages
 	 * @return the redirect URL after updating
 	 */
-	@PostMapping("/profile")
-	public String changePassword(String newPassword, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-		if (isCustomerLoggedIn(request)) {
+	@PostMapping("/profile/change-password")
+	public String changePassword(String oldPassword, String newPassword, RedirectAttributes redirectAttributes, HttpServletRequest request, Model model) {
+		if (!isCustomerLoggedIn(request)) {
 			log.warn("Update password failed: customer not logged in.");
 			return "redirect:/login";
 		}
@@ -63,12 +63,13 @@ public class CustomerController {
 		HttpSession session = request.getSession(false);
 		var customerUsername = session.getAttribute("username").toString();
 		try {
-			customerService.changePassword(customerUsername, newPassword);
+			customerService.changePassword(customerUsername, oldPassword, newPassword);
 			log.info("Password for customer {} updated successfully", customerUsername);
 			redirectAttributes.addFlashAttribute("message", "Password updated successfully");
 			return "redirect:/profile";
 		} catch(NoSuchElementException e) {
 			log.error("Failed to update password for customer {}", customerUsername);
+			model.addAttribute("error", "Mot de passe incorrect. Réessayez.");
 			redirectAttributes.addFlashAttribute("error", "Failed to update password. Please try again.");
 			return "redirect:/profile";
 		}
@@ -97,15 +98,26 @@ public class CustomerController {
 	}
 
 	/**
+	 * Adds a buddy (contact) to the customer's buddy list
 	 *
-	 * @return
+	 * @param buddyEmail the email of the contact to be added
+	 * @param session the HTTP session containing the logged-in customer's information
+	 * @param redirectAttributes used to pass messages (success or error) to the redirected view
+	 * @return a redirect to the transfer page
 	 */
 	@PostMapping("/add")
-	public String addBuddy(String buddyEmail, HttpSession session) {
+	public String addBuddy(String buddyEmail, HttpSession session, RedirectAttributes redirectAttributes) {
 		var customerUsername = session.getAttribute("username").toString();
-		var buddyUsername = customerService.addBuddy(customerUsername, buddyEmail); // TODO: clarifier
-		log.info("{} has added {} to buddy list", customerUsername, buddyUsername);
-		return "transfer";
+
+		try {
+			var buddyUsername = customerService.addBuddy(customerUsername, buddyEmail);
+			log.info("{} has added {} to buddy list", customerUsername, buddyUsername);
+		} catch (Exception e) {
+			log.error("Failed to add buddy for {}: {}", customerUsername, e.getMessage());
+			redirectAttributes.addFlashAttribute("error", "Failed to add contact: " + e.getMessage());
+		}
+
+		return "redirect:/transfer";
 	}
 
 	/**
@@ -116,7 +128,7 @@ public class CustomerController {
 	 */
 	private boolean isCustomerLoggedIn(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
-		return session != null && session.getAttribute("username") != null;
+		return session != null && session.getAttribute("email") != null;
 	}
 
 }
