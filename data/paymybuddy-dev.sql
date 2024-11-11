@@ -12,7 +12,7 @@ CREATE TABLE customer
 CREATE INDEX index_username ON customer (username); -- user search optimization
 CREATE INDEX index_email ON customer (email); -- user search optimization
 
-CREATE TABLE buddy
+CREATE TABLE customer_buddy
 (
 	PRIMARY KEY (customer_id, buddy_id),
 	customer_id INT REFERENCES customer (id) NOT NULL,

@@ -51,7 +51,7 @@ public class Customer {
 	@ManyToMany
 	@EqualsAndHashCode.Exclude
 	@JoinTable(
-			name = "buddy", //TODO: renommer en customer_buddy
+			name = "customer_buddy",
 			joinColumns = @JoinColumn(name = "customer_id"),
 			inverseJoinColumns = @JoinColumn(name = "buddy_id")
 	)
