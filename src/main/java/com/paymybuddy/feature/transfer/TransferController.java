@@ -54,7 +54,7 @@ public class TransferController {
 		model.addAttribute("buddies", buddies);
 		model.addAttribute("transfers", transfers);
 		log.info("Displaying transfer page");
-		return "transfer";
+		return "redirect:/transfer";
 	}
 
 	/**
@@ -81,7 +81,6 @@ public class TransferController {
 
 		if (result.hasErrors()) {
 			redirectAttributes.addFlashAttribute("errorMessage", "Erreur dans les champs du formulaire.");
-			return "redirect:/transfer";
 		}
 
 		try {

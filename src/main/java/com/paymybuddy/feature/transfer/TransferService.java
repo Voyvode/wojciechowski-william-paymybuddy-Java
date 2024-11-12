@@ -27,9 +27,8 @@ public class TransferService {
 	 * @param receiverUsername the username of the receiver
 	 * @param amount the amount to be transferred
 	 * @param description a description of the transfer
-	 * @return the created Transfer object
 	 */
-	public Transfer createTransfer(String senderUsername, String receiverUsername, BigDecimal amount, String description) {
+	public void createTransfer(String senderUsername, String receiverUsername, BigDecimal amount, String description) {
 		var sender = customerRepo.findByUsername(senderUsername)
 				.orElseThrow(() -> new NoSuchElementException("Sender not found"));
 		var receiver = customerRepo.findByUsername(receiverUsername)
@@ -38,8 +37,6 @@ public class TransferService {
 		var transfer = new Transfer(sender, receiver, amount, description);
 
 		transferRepo.save(transfer);
-
-		return transfer;
 	}
 
 	/**
