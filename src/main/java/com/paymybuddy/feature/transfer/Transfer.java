@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+/**
+ * Entity representing a money transfer from one customer to another.
+ */
 @Entity
 @Table(name = "transfer")
 @NoArgsConstructor
@@ -39,6 +42,14 @@ public class Transfer {
 	@Column(nullable = false)
 	Instant timestamp;
 
+	/**
+	 * Constructs a new Transfer instance.
+	 *
+	 * @param sender      the customer sending the money
+	 * @param receiver    the customer receiving the money
+	 * @param amount      the amount of money being transferred
+	 * @param description a description of the transfer
+	 */
 	public Transfer(Customer sender, Customer receiver, BigDecimal amount, String description) {
 		this.sender = sender;
 		this.receiver = receiver;
@@ -46,4 +57,5 @@ public class Transfer {
 		this.description = description;
 		this.timestamp = Instant.now();
 	}
+
 }

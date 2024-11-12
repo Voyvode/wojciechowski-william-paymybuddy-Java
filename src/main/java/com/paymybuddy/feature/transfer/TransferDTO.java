@@ -8,6 +8,11 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
+/**
+ * DTO for transfers.
+ *
+ * <p>This DTO is used to encapsulate the data required for a transfer request.
+ */
 @Data
 @Builder
 public class TransferDTO {
