@@ -3,6 +3,7 @@ package com.paymybuddy.core.security;
 import com.paymybuddy.feature.customer.Customer;
 import com.paymybuddy.feature.customer.CustomerRepository;
 import jakarta.persistence.EntityExistsException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.websocket.AuthenticationException;
@@ -68,6 +69,17 @@ public class AuthenticationService {
 
 		log.info("{} authenticated at {}", customer.getUsername(), now);
 		return customer;
+	}
+
+	/**
+	 * Checks if a customer is currently logged in.
+	 *
+	 * @param request the HTTP request object
+	 * @return true if the customer is logged in, false otherwise
+	 */
+	public boolean isCustomerLoggedIn(HttpServletRequest request) {
+		var session = request.getSession(false);
+		return session != null && session.getAttribute("email") != null;
 	}
 
 }

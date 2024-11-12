@@ -15,8 +15,7 @@ import java.util.Set;
 /**
  * Represents a customer in the PayMyBuddy application.
  *
- * <p>Stores essential information about users, including their account details,
- * balance, and relationships with other customers.
+ * <p>Stores essential information about users and their relationships with other customers.
  */
 @Entity
 @Table(name = "customer")
@@ -55,16 +54,27 @@ public class Customer {
 			joinColumns = @JoinColumn(name = "customer_id"),
 			inverseJoinColumns = @JoinColumn(name = "buddy_id")
 	)
-	private Set<Customer> buddies;
+	private Set<Customer> buddies = new HashSet<>();
 
+	/**
+	 * Creates a new customer with the given details.
+	 *
+	 * @param username     the customer's username
+	 * @param email        the customer's email address
+	 * @param passwordHash the hashed password of the customer
+	 */
 	public Customer(String username, String email, String passwordHash) {
 		this.username = username;
 		this.email = email;
 		this.passwordHash = passwordHash;
 		this.createdAt = Instant.now();
-		this.buddies = new HashSet<>();
 	}
 
+	/**
+	 * Adds another customer to buddy list.
+	 *
+	 * @param otherCustomer the customer to be added to buddy list
+	 */
 	public void addBuddy(Customer otherCustomer) {
 		if (!email.equals(otherCustomer.getEmail())) {
 			buddies.add(otherCustomer);

@@ -17,7 +17,7 @@ public class TransferService {
 	private final TransferRepository transferRepo;
 	private final CustomerRepository customerRepo;
 
-	public void createTransfer(String senderUsername, String receiverUsername, BigDecimal amount, String description) {
+	public Transfer createTransfer(String senderUsername, String receiverUsername, BigDecimal amount, String description) {
 		var sender = customerRepo.findByUsername(senderUsername)
 				.orElseThrow(() -> new NoSuchElementException("Sender not found"));
 		var receiver = customerRepo.findByUsername(receiverUsername)
@@ -26,10 +26,12 @@ public class TransferService {
 		var transfer = new Transfer(sender, receiver, amount, description);
 
 		transferRepo.save(transfer);
+
+		return transfer;
 	}
 
 	public Set<Customer> getBuddiesForCustomer(String customerUsername) {
-		if (!customerRepo.existsByUsername(customerUsername)) {
+		if (customerRepo.isUsernameAvailable(customerUsername)) {
 			throw new NoSuchElementException("Customer with id " + customerUsername + " not found");
 		}
 
@@ -37,7 +39,7 @@ public class TransferService {
 	}
 
 	public List<Transfer> getTransfersForCustomer(String customerUsername) {
-		if (!customerRepo.existsByUsername(customerUsername)) {
+		if (customerRepo.isUsernameAvailable(customerUsername)) {
 			throw new NoSuchElementException("Customer with id " + customerUsername + " not found");
 		}
 
