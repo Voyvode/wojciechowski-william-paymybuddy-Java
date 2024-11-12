@@ -54,7 +54,7 @@ public class TransferController {
 		model.addAttribute("buddies", buddies);
 		model.addAttribute("transfers", transfers);
 		log.info("Displaying transfer page");
-		return "redirect:/transfer";
+		return "transfer";
 	}
 
 	/**

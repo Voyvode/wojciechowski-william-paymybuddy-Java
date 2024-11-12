@@ -17,8 +17,7 @@ import java.util.Arrays;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -47,7 +46,7 @@ public class TransferControllerTest {
 	@Test
 	public void testDisplayTransferPage_WhenLoggedIn_ShouldShowTransferPage() throws Exception {
 		mockMvc.perform(get("/transfer").session(session))
-				.andExpect(redirectedUrl("/transfer"));
+				.andExpect(view().name("transfer"));
 	}
 
 	@Test
