@@ -9,6 +9,8 @@ import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+
 /**
  * Service handling user authentication and registration.
  */
@@ -53,12 +55,19 @@ public class AuthenticationService {
 	 * @throws AuthenticationException if authentication fails
 	 */
 	public Customer authenticate(String email, String password) throws AuthenticationException {
-		return customerRepo.findByEmail(email)
-				.filter(customer -> SecurityUtils.verifyPassword(password, customer.getPasswordHash()))
+		var customer = customerRepo.findByEmail(email)
+				.filter(registeredCustomer -> SecurityUtils.verifyPassword(password, registeredCustomer.getPasswordHash()))
 				.orElseThrow(() -> {
 					log.warn("Failed authentication attempt for {}", email);
 					return new AuthenticationException("Invalid email or password");
 				});
+
+		var now = Instant.now();
+		customer.setLastLoginAt(now);
+		customerRepo.save(customer);
+
+		log.info("{} authenticated at {}", customer.getUsername(), now);
+		return customer;
 	}
 
 }

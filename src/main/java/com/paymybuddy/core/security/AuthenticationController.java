@@ -95,7 +95,7 @@ public class AuthenticationController {
 			sessionCookie.setSecure(true);
 			response.addCookie(sessionCookie);
 
-			log.info("{} ({}) logged in successfully", dto.getUsername(), dto.getEmail());
+			log.info("{} ({}) logged in successfully", authenticatedCustomer.getUsername(), authenticatedCustomer.getEmail());
 			return "redirect:/transfer";
 
 		} catch (AuthenticationException e) {
