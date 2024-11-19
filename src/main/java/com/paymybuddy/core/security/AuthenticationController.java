@@ -158,6 +158,11 @@ public class AuthenticationController {
 			return "register";
 		}
 
+		if (!dto.isEmailConfirmMatching() || !dto.isPasswordConfirmMatching()) {
+			log.error("Email or password field not matching. Did a robot try to register as '{}' ?", dto.getUsername());
+			return "register";
+		}
+
 		try {
 			authService.register(dto.getUsername(), dto.getEmail(), dto.getPassword());
 			log.info("New customer '{}' registered with {}", dto.getUsername(), dto.getEmail());

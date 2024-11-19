@@ -36,12 +36,10 @@ public class AuthenticationService {
 			log.warn("Registration attempt with existing username ({}) or email ({})", username, email);
 			throw new EntityExistsException("Customer with same username or email already exists");
 		}
-		// TODO: email confirm
 		if (!SecurityUtils.isPasswordStrong(password)) {
 			log.warn("Registration attempt with weak password for {}", email);
 			throw new IllegalArgumentException("Password is not strong enough");
 		}
-		// TODO: password confirm
 		var newCustomer = new Customer(username, email, SecurityUtils.hashPassword(password));
 		customerRepo.save(newCustomer);
 		log.info("New customer '{}' registered with {}", username, email);

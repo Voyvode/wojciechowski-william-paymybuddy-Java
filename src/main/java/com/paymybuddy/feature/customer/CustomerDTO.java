@@ -36,7 +36,7 @@ public class CustomerDTO {
 	 *
 	 * @return true if email and emailConfirm are equal, false otherwise
 	 */
-	public boolean isEmailMatching() {
+	public boolean isEmailConfirmMatching() {
 		return email != null && email.equals(emailConfirm);
 	}
 
@@ -45,7 +45,7 @@ public class CustomerDTO {
 	 *
 	 * @return true if password and passwordConfirm are equal, false otherwise
 	 */
-	public boolean isPasswordMatching() {
+	public boolean isPasswordConfirmMatching() {
 		return password != null && password.equals(passwordConfirm);
 	}
 
