@@ -1,108 +1,173 @@
-/* Page d'inscription */
-.register-page {
-    position: relative;
-    width: 100%;
-    max-width: 1440px;
-    height: 1024px;
-    margin: 0 auto;
-    background-color: #FFFFFF;
-}
-
-/* Boutons */
-.btn {
+html, body {
+    height: 100%;
+    margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 14px 24px;
     font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 150%;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    cursor: pointer;
+    background-color: #C6C3BF;
 }
 
-.btn-primary {
-    position: absolute;
-    width: 159px;
-    height: 64px;
-    left: 644px;
-    top: 728px;
-    background-color: #207FEE;
+label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #828282;
+    user-select: none;
+    margin-bottom: 8px;
 }
 
-.btn-secondary {
-    position: absolute;
-    width: 220px;
-    height: 64px;
-    left: 613px;
-    top: 274px;
-    background-color: #F69F1D;
-}
-
-/* Champs de saisie */
-.input-field {
+.form-container {
     box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    width: 295px;
-    height: 60px;
+    width: 512px;
+    padding: 32px;
     background-color: #FFFFFF;
+    border-radius: 8px;
+    border: 2px solid #E0E0E0;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+
+.logo {
+    height: 256px;
+    margin: 16px;
+}
+
+.form-register {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+/*
+.input-field {
+    font-size: 16px;
+    color: #828282;
     border: 1px solid #E0E0E0;
     border-radius: 8px;
+    background-color: #FFFFFF;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    padding: 8px 16px;
 }
 
 .input-field input {
     width: 100%;
     border: none;
     outline: none;
-    font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 24px;
-    line-height: 150%;
+    font-size: 16px;
+    color: #828282;
+}
+*/
+.input-field input:focus {
+    border-color: #207FEE;
+    box-shadow: 0 0 0 3px rgba(32, 127, 238, 0.2);
+}
+
+/*** Error Messages ***/
+
+.error-message-container {
+    display: flex;
+    align-items: center;
+    background-color: #F8D7DA;
+    border: 1px solid #F5C6CB;
+    border-radius: 8px;
+    padding: 12px;
+    color: #6C1A1A;
+    font-size: 14px;
+    gap: 8px;
+}
+
+.error-message-container .icon {
+    width: 24px;
+    height: 24px;
+    fill: #6C1A1A;
+}
+
+.error-message {
+    margin: 0;
+    font-weight: 500;
+}
+
+/*** Buttons ***/
+
+.btn {
+    padding: 16px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.2s;
+}
+
+.btn-primary {
+    background-color: #207FEE;
+}
+
+.btn-primary:hover {
+    background-color: #0066CC;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary:active {
+    background-color: #005BBB;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.register-link {
+    font-weight: 600;
+    color: #207FEE;
+    text-decoration: none;
+}
+
+.register-link:hover {
+    color: #0066CC;
+    text-decoration: underline;
+}
+
+/* Conteneur de la paire */
+.input-pair {
+    width: 320px;
+    font-size: 16px;
+    color: #828282;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    padding: 8px 16px;
+}
+
+/* Champs individuels */
+.input-pair input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-weight: 700;
+    font-size: 16px;
     color: #828282;
 }
 
-.input-field:nth-of-type(1) {
-    position: absolute;
-    left: 583px;
-    top: 404px;
+/* Ajoute une fine séparation entre les champs */
+.input-pair input:not(:last-child) {
+    border-bottom: 1px solid #E0E0E0;
 }
 
-.input-field:nth-of-type(2) {
-    position: absolute;
-    left: 583px;
-    top: 485px;
+/* Placeholder */
+.input-pair input::placeholder {
+    color: #828282; /* Couleur plus discrète pour le placeholder */
+    font-weight: 400;
 }
 
-.input-field:nth-of-type(3) {
-    position: absolute;
-    left: 583px;
-    top: 566px;
+/* Effet au focus */
+.input-pair input:focus {
+    background-color: #F0F8FF;
 }
 
-/* Cadre */
-.register-frame {
-    box-sizing: border-box;
-    position: absolute;
-    width: 500px;
-    height: 688px;
-    left: 470px;
-    bottom: 126px;
-    border: 1px solid #000000;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-}
-
-/* Image ou icône */
-.register-icon {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    left: 1169px;
-    top: 473px;
+.input-pair:hover {
+    border-color: #207FEE; /* Accentuation au survol */
 }

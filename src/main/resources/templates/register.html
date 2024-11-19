@@ -8,27 +8,41 @@
     <title>Inscription − Pay My Buddy</title>
 </head>
 <body>
-<main class="register-page">
-    <div class="register-frame"></div>
+<main class="form-container">
+    <img src="/img/logo-pmb.svg" alt="Pay My Buddy" class="logo" aria-label="Logo de Pay My Buddy">
 
-    <button class="btn btn-secondary">Pay My Buddy</button>
+    <form class="form-register" th:action="@{/register}" th:object="${newCustomer}" method="post">
+        <!-- Message d'erreur -->
+        <div class="error-message-container" th:if="${error != null}">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"></path>
+            </svg>
+            <p class="error-message" th:text="${error}"></p>
+        </div>
 
-    <form th:action="@{/register}" th:object="${newCustomer}" method="post">
-        <div class="input-field">
-            <input type="text" th:field="*{username}" placeholder="Username">
+        <!-- Formulaire -->
+        <div class="input-pair">
+            <label for="username" class="input-label">Pseudo</label>
+            <input id="username" type="text" th:field="*{username}" placeholder="un pseudo unique" required>
         </div>
-        <div class="input-field">
-            <input type="email" th:field="*{email}" placeholder="Mail">
+        <div class="input-pair">
+            <label for="email" class="input-label">E-mail</label>
+            <input id="email" type="text" th:field="*{email}" placeholder="E-mail" aria-required="true" required>
+            <label for="email-confirmation" class="input-label">Confirmation</label>
+            <input id="email-confirmation" type="text" th:field="*{emailConfirm}" placeholder="Confirmation de l'e-mail" aria-required="true" required>
         </div>
-        <div class="input-field">
-            <input type="password" th:field="*{password}" placeholder="Mot de passe">
+        <div class="input-pair">
+            <label for="password" class="input-label">Mot de passe</label>
+            <input id="password" type="password" th:field="*{password}" placeholder="Mot de passe" aria-required="true" required>
+            <label for="password-confirmation" class="input-label">Confirmation</label>
+            <input id="password-confirmation" type="password" th:field="*{passwordConfirm}" placeholder="Confirmation du mot de passe" aria-required="true" required>
         </div>
-        <button class="btn btn-primary" type="submit">S’inscrire</button>
+
+        <!-- Bouton d'envoi -->
+        <button type="submit" class="btn btn-primary">S’inscrire</button>
     </form>
 
-    <div class="register-icon"></div>
-
-    <a th:href="@{/login}">Connexion</a>
+    <p>Déjà inscrit ? <a class="login-link" th:href="@{/login}">Se connecter</a></p>
 </main>
 </body>
 </html>
