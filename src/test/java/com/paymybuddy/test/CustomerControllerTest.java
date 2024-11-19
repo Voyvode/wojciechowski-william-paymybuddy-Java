@@ -16,8 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -65,14 +64,14 @@ public class CustomerControllerTest {
 	}
 
 	@Test
-	public void testChangePassword_FailedChange_ShouldShowErrorMessage() throws Exception {
+	public void testChangePassword_FailedChange_ShouldRedirectWithErrorMessage() throws Exception {
 		mockMvc.perform(post("/profile/change-password")
 						.session(session)
 						.contentType(APPLICATION_FORM_URLENCODED)
-						.param("oldPassword", "wrongPassword")
+						.param("oldPassword", "wrongPassword") // Mot de passe incorrect
 						.param("newPassword", "newSecurePa$$123"))
-				.andExpect(view().name("profile"))
-				.andExpect(MockMvcResultMatchers.model().attributeExists("error"));
+				.andExpect(redirectedUrl("/profile"))
+				.andExpect(flash().attributeExists("error"));
 	}
 
 	@Test
