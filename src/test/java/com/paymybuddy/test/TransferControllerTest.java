@@ -60,7 +60,7 @@ public class TransferControllerTest {
 		mockMvc.perform(post("/transfer")
 						.session(session)
 						.contentType(APPLICATION_FORM_URLENCODED)
-						.param("receiverUsername", "buddyUser")
+						.param("receiverUsername", "receiver")
 						.param("amount", "100")
 						.param("description", "Paiement test"))
 				.andExpect(redirectedUrl("/transfer"))
