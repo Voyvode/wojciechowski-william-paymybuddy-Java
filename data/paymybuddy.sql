@@ -13,8 +13,8 @@ CREATE INDEX index_email ON customer (email); -- user search optimization
 CREATE TABLE customer_buddy
 (
 	PRIMARY KEY (customer_id, buddy_id),
-	customer_id INT REFERENCES customer (id) NOT NULL,
-	buddy_id    INT REFERENCES customer (id) NOT NULL,
+	customer_id INTEGER REFERENCES customer (id) NOT NULL,
+	buddy_id    INTEGER REFERENCES customer (id) NOT NULL,
 	CONSTRAINT no_self_buddy CHECK (customer_id != buddy_id),
 	CONSTRAINT unique_buddy UNIQUE (customer_id, buddy_id)
 );
@@ -22,9 +22,9 @@ CREATE TABLE customer_buddy
 CREATE TABLE transfer
 (
 	id          SERIAL PRIMARY KEY,
-	sender      INT REFERENCES customer (id) NOT NULL,
-	receiver    INT REFERENCES customer (id) NOT NULL,
-	description TEXT,
+	sender      INTEGER REFERENCES customer (id) NOT NULL,
+	receiver    INTEGER REFERENCES customer (id) NOT NULL,
+	description VARCHAR(255),
 	amount      NUMERIC(5, 2) CHECK (amount > 0 AND amount <= 1000),
 	timestamp   TIMESTAMP                    NOT NULL
 );

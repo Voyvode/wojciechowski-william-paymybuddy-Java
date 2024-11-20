@@ -1,0 +1,19 @@
+image::https://user.oc-static.com/upload/2024/05/20/17162226887581_P6-01_Pay%20My%20Buddy.png[Pay My Buddy]
+
+Personal payment made friendlier!
+
+Pay My Buddy eases cash management between friends money transfers, financial management, and payments
+to friends. Key features include an intuitive interface, financial tracking tools, and secured transactions.
+
+// image:https://img.shields.io/badge/unit-pass-brightgreen[unit = pass]
+// image:https://img.shields.io/badge/coverage-93%25-brightgreen[coverage = 93%]
+
+== Physical Data Model
+
+image::/doc/paymybuddy-pdm.png[Pay My Buddy PDM]
+
+Some renaming were made to disambiguate a couple of things:
+
+- `client` → `customer`: avoids conflicts with the PostgreSQL keyword _client_.
+- `connection` → `customer_buddy`: _connection_ was too generic for a social relationship.
+- `transaction` → `transfer`: _transfer_ better describes money movement and avoids confusion with database _transactions_.
