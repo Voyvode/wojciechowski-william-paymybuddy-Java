@@ -97,6 +97,4 @@ public class AuthenticationControllerTest {
 				.andExpect(view().name("register"));
 	}
 
-	// TODO: Compléter avec des essais d’enregistrement
-
 }
