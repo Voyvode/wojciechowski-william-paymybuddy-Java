@@ -4,6 +4,7 @@ import com.paymybuddy.feature.customer.Customer;
 import com.paymybuddy.feature.customer.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,6 +29,7 @@ public class TransferService {
 	 * @param amount the amount to be transferred
 	 * @param description a description of the transfer
 	 */
+	@Transactional
 	public void createTransfer(String senderUsername, String receiverUsername, BigDecimal amount, String description) {
 		var sender = customerRepo.findByUsername(senderUsername)
 				.orElseThrow(() -> new NoSuchElementException("Sender not found"));
