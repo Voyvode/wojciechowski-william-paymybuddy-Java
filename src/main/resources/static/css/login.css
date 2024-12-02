@@ -1,0 +1,113 @@
+:root {
+    --font-family: 'Inter', sans-serif;
+    --color-background: #C6C3BF;
+    --color-text-primary: #595959;
+    --color-error-bg: #f8d7da;
+    --color-error-border: #f5c6cb;
+    --color-error-text: #6c1a1a;
+    --color-button-primary: #0D57AB;
+    --color-button-primary-hover: #0066cc;
+    --color-button-secondary: #F69F1D;
+    --color-button-secondary-hover: #e68915;
+    --color-link: #0D57AB;
+    --color-link-hover: #0066cc;
+    --common-border-radius: 8px;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-family), sans-serif;
+    background-color: var(--color-background);
+}
+
+main {
+    box-sizing: border-box;
+    width: 512px;
+    padding: 32px;
+    background-color: #FFFFFF;
+    border-radius: var(--common-border-radius);
+    border: 2px solid #E0E0E0;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    user-select: none;
+    margin-bottom: 8px;
+}
+
+.form-login {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.input-field {
+    width: 320px;
+    font-size: 16px;
+    color: var(--color-text-primary);
+    border: 1px solid #E0E0E0;
+    border-radius: var(--common-border-radius);
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    padding: 8px 16px;
+}
+
+.input-field input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--color-text-primary);
+}
+
+.btn {
+    padding: 16px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--common-border-radius);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: var(--color-button-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-button-primary-hover);
+}
+
+.register-link {
+    color: var(--color-link);
+    text-decoration: none;
+}
+
+.register-link:hover {
+    color: var(--color-link-hover);
+    text-decoration: underline;
+}
+
+.login-error {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 4px;
+    background-color: #f5e8e8;
+    color: #7d2e2e;
+    font-weight: 600;
+}

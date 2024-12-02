@@ -8,9 +8,11 @@
     <title>Transférer - Pay My Buddy</title>
 </head>
 <body>
-<main class="transfer-page">
+<main>
+
+    <!-- Navigation -->
     <header class="header">
-        <img src="/img/logo-pmb-side.svg" alt="Pay My Buddy" class="logo" aria-label="Logo de Pay My Buddy">
+        <a class="logo" th:href="@{/transfer}"><img src="/img/logo-pmb-side.svg" alt="Logo de Pay My Buddy"></a>
         <nav class="nav-items">
             <a th:href="@{/transfer}" class="nav-item active">Transférer</a>
             <a th:href="@{/add}" class="nav-item">Ajouter un contact</a>
@@ -18,6 +20,8 @@
             <a th:href="@{/logout}" class="nav-item">Se déconnecter</a>
         </nav>
     </header>
+
+    <!-- Formulaire de transfert -->
     <form class="transfer-form" th:action="@{/transfer}" th:object="${newTransfer}" method="post">
         <div class="dropdown">
             <label for="receiver">Destinataire</label>
@@ -30,7 +34,7 @@
         </div>
         <div class="input-field">
             <label for="amount">Montant</label>
-            <input id="amount" type="number" th:field="*{amount}" placeholder="Montant" step="0.01" min="0" required>
+            <input id="amount" type="number" min="0" max="1000" step="0.01" th:field="*{amount}" placeholder="Montant" required>
         </div>
         <div class="input-field">
             <label for="description">Description</label>
@@ -38,6 +42,8 @@
         </div>
         <button type="submit" class="btn-transfer">Payer</button>
     </form>
+
+    <!-- Historique des transferts effectués -->
     <section class="transfer-history">
         <table class="transfer-table">
             <thead>

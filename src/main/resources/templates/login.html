@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
-    <link rel="stylesheet" href="/css/buddy.css" th:href="@{/css/buddy.css}" type="text/css">
+    <link rel="stylesheet" href="/css/login.css" th:href="@{/css/login.css}" type="text/css">
     <title>Connexion ‑ Pay My Buddy</title>
 </head>
 <body>
-<main class="login-frame">
-    <img src="/img/logo-pmb.svg" alt="Pay My Buddy" class="login-logo" aria-label="Logo de Pay My Buddy">
-    <form class="login-form" th:action="@{/login}" th:object="${customer}" method="post">
-        <div class="wrong-login" th:if="${error != null}">
-            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"></path></svg>
-            <p class="error-message" th:text="${error}"/>
-        </div>
+<main>
+    <img src="/img/logo-pmb.svg" alt="Log de Pay My Buddy" class="logo">
+
+    <form class="form-login" th:action="@{/login}" th:object="${customer}" method="post">
+        <!-- Message d'erreur -->
+        <p th:if="${error != null}" th:text="${error}" class="password-change-error"></p>
+
+        <!-- Champs -->
         <div class="input-field">
             <label for="email">E-mail</label>
             <input id="email" type="text" th:field="*{email}" placeholder="adresse@mail.com" aria-required="true" required>
@@ -23,8 +24,11 @@
             <label for="password">Mot de passe</label>
             <input id="password" type="password" th:field="*{password}" placeholder="Mot de passe" aria-required="true" required>
         </div>
+
+        <!-- Bouton d'envoi -->
         <button type="submit" class="btn btn-primary">Se connecter</button>
     </form>
+
     <p>Pas encore de compte ? <a class="register-link" th:href="@{/register}">S’inscrire</a></p>
 </main>
 </body>

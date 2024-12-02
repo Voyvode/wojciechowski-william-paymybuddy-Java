@@ -1,25 +1,44 @@
+:root {
+    --color-background-main: #F5F5F5;
+    --color-header-background: #FFFFFF;
+    --color-font-primary: #555555;
+    --color-font-active: #0D57AB;
+    --color-shadow: rgba(0, 0, 0, 0.1);
+    --color-row-alternate: #FAFAFA;
+    --color-btn-background: #0D57AB;
+    --color-btn-hover: #0056B3;
+
+    --height-header: 70px;
+    --gap-large: 32px;
+    --padding-standard: 16px;
+}
+
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+    background-color: #C6C3BF;
 }
 
-/* Page de transfert */
-.transfer-page {
+main {
     position: relative;
     width: 100%;
     min-height: 100vh;
     margin: 0 auto;
-    background-color: #F5F5F5; /* Light grey background for better contrast */
+    background-color: var(--color-background-main);
     font-family: 'Inter', sans-serif;
 }
 
-/* Header Navigation */
+.logo {
+    display: flex;
+    margin: 8px;
+}
+
 .header {
     width: 100%;
-    height: 70px;
-    background-color: #FFFFFF;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for header */
+    height: var(--height-header);
+    background-color: var(--color-header-background);
+    box-shadow: 0 4px 6px var(--color-shadow);
     display: flex;
     justify-content: center;
 }
@@ -28,7 +47,7 @@ html, body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 32px;
+    gap: var(--gap-large);
     max-width: 1080px;
     width: 100%;
 }
@@ -36,35 +55,30 @@ html, body {
 .nav-item {
     font-size: 16px;
     font-weight: 500;
-    color: #555555;
+    color: var(--color-font-primary);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-.nav-item:hover {
-    color: #207FEE; /* Active color on hover */
+.nav-item:hover,
+.nav-item.active {
+    color: var(--color-font-active);
 }
 
 .nav-item.active {
     font-weight: 700;
-    color: #207FEE;
 }
 
-.logo {
-    margin: 8px;
-}
-
-/* Transfer Form */
 .transfer-form {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: var(--gap-large);
     max-width: 600px;
     margin: 40px auto;
     padding: 24px;
-    background-color: #FFFFFF;
+    background-color: var(--color-header-background);
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px var(--color-shadow);
 }
 
 .dropdown, .input-field {
@@ -79,35 +93,21 @@ html, body {
     padding: 12px;
     border-radius: 4px;
     border: 1px solid #E0E0E0;
-    background-color: #FAFAFA;
+    background-color: var(--color-row-alternate);
     transition: border 0.3s ease, background-color 0.3s ease;
 }
 
 .dropdown select:focus,
 .input-field input:focus {
-    border-color: #207FEE;
-    background-color: #FFFFFF;
-}
-
-.dropdown {
-    position: relative;
-}
-
-.dropdown::before {
-    content: '▼';
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 18px;
-    color: #AAAAAA;
+    border-color: var(--color-font-active);
+    background-color: var(--color-header-background);
 }
 
 .btn-transfer {
     width: 100%;
-    padding: 16px;
-    background-color: #207FEE;
-    color: #FFFFFF;
+    padding: var(--padding-standard);
+    background-color: var(--color-btn-background);
+    color: var(--color-header-background);
     border: none;
     border-radius: 8px;
     font-weight: 700;
@@ -117,10 +117,9 @@ html, body {
 }
 
 .btn-transfer:hover {
-    background-color: #0056B3;
+    background-color: var(--color-btn-hover);
 }
 
-/* Transfer Table */
 .transfer-history {
     margin-top: 40px;
     max-width: 1080px;
@@ -133,19 +132,19 @@ html, body {
     border-collapse: collapse;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px var(--color-shadow);
 }
 
 .table-header {
-    background-color: #F5F5F5;
-    padding: 16px;
+    background-color: var(--color-background-main);
+    padding: var(--padding-standard);
     font-size: 18px;
     font-weight: 600;
-    color: #555555;
+    color: var(--color-font-primary);
 }
 
 .table-body {
-    background-color: #FFFFFF;
+    background-color: var(--color-header-background);
 }
 
 .table-row {
@@ -153,13 +152,13 @@ html, body {
 }
 
 .table-row:nth-child(odd) {
-    background-color: #FAFAFA;
+    background-color: var(--color-row-alternate);
 }
 
 .table-cell {
-    padding: 16px;
+    padding: var(--padding-standard);
     font-size: 16px;
-    color: #555555;
+    color: var(--color-font-primary);
     text-align: center;
 }
 
@@ -167,191 +166,7 @@ html, body {
     background-color: #F1F1F1;
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-/* Page de recherche d'un contact */
-.search-page {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    margin: 0 auto;
-    background-color: #F5F5F5; /* Fond gris clair */
-    font-family: 'Inter', sans-serif;
-}
-
-/* Header Navigation */
-.header {
-    width: 100%;
-    height: 70px;
-    background-color: #FFFFFF;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for header */
-    display: flex;
-    justify-content: center;
-}
-
-.nav-items {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 32px;
-    max-width: 1080px;
-    width: 100%;
-}
-
-.nav-item {
-    font-size: 16px;
-    font-weight: 500;
-    color: #555555;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.nav-item:hover {
-    color: #207FEE; /* Couleur active au survol */
-}
-
-.nav-item.active {
-    font-weight: 700;
-    color: #207FEE;
-}
-
-.logo {
-    margin: 8px;
-}
-
-/* Formulaire de recherche */
-.search-form {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 24px;
-    background-color: #FFFFFF;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
 .input-label {
     font-size: 16px;
-    color: #555555;
-}
-
-.input-field {
-    font-size: 16px;
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid #E0E0E0;
-    background-color: #FAFAFA;
-    transition: border 0.3s ease, background-color 0.3s ease;
-}
-
-.input-field:focus {
-    border-color: #207FEE;
-    background-color: #FFFFFF;
-}
-
-.btn-add {
-    width: 100%;
-    padding: 16px;
-    background-color: #207FEE;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn-add:hover {
-    background-color: #0056B3;
-}
-
-/* Formulaire de recherche */
-.search-form {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 24px;
-    background-color: #FFFFFF;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.input-label {
-    font-size: 16px;
-    color: #555555;
-}
-
-.input-field {
-    font-size: 16px;
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid #E0E0E0;
-    background-color: #FAFAFA;
-    transition: border 0.3s ease, background-color 0.3s ease;
-}
-
-.input-field:focus {
-    border-color: #207FEE;
-    background-color: #FFFFFF;
-}
-
-.btn-add {
-    width: 100%;
-    padding: 16px;
-    background-color: #207FEE;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn-add:hover {
-    background-color: #0056B3;
-}
-
-/* Page de profile */
-.profile-page {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    margin: 0 auto;
-    background-color: #F5F5F5; /* Fond gris clair */
-    font-family: 'Inter', sans-serif;
-}
-
-/* Profile Form */
-.profile-section {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 24px;
-    background-color: #FFFFFF;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: var(--color-font-primary);
 }

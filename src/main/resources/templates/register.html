@@ -4,45 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
-    <link rel="stylesheet" th:href="@{/css/register.css}">
+    <link rel="stylesheet" href="/css/register.css" th:href="@{/css/register.css}" type="text/css">
+    <script src="/js/password-checker.js" defer></script>
     <title>Inscription − Pay My Buddy</title>
 </head>
 <body>
-<main class="form-container">
-    <img src="/img/logo-pmb.svg" alt="Pay My Buddy" class="logo" aria-label="Logo de Pay My Buddy">
+<main>
+    <img class="logo" src="/img/logo-pmb.svg" alt="Logo de Pay My Buddy">
 
     <form class="form-register" th:action="@{/register}" th:object="${newCustomer}" method="post">
         <!-- Message d'erreur -->
-        <div class="error-message-container" th:if="${error != null}">
-            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"></path>
-            </svg>
+        <div class="error-notification" th:if="${error != null}">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"></path></svg>
             <p class="error-message" th:text="${error}"></p>
         </div>
 
-        <!-- Formulaire -->
+        <!-- Champs -->
         <div class="input-pair">
             <label for="username" class="input-label">Pseudo</label>
-            <input id="username" type="text" th:field="*{username}" placeholder="un pseudo unique" required>
+            <input id="username" type="text" th:field="*{username}" placeholder="un pseudo unique" autocomplete="one-time-code" required>
         </div>
         <div class="input-pair">
             <label for="email" class="input-label">E-mail</label>
-            <input id="email" type="text" th:field="*{email}" placeholder="E-mail" aria-required="true" required>
+            <input id="email" type="email" th:field="*{email}" placeholder="adresse@mail.com" autocomplete="one-time-code" required>
             <label for="email-confirmation" class="input-label">Confirmation</label>
-            <input id="email-confirmation" type="text" th:field="*{emailConfirm}" placeholder="Confirmation de l'e-mail" aria-required="true" required>
+            <input id="email-confirmation" type="email" th:field="*{emailConfirm}" placeholder="adresse@mail.com" autocomplete="one-time-code" required>
         </div>
         <div class="input-pair">
             <label for="password" class="input-label">Mot de passe</label>
-            <input id="password" type="password" th:field="*{password}" placeholder="Mot de passe" aria-required="true" required>
+            <input id="password" type="password" th:field="*{password}" placeholder="Saisissez un mot de passe" autocomplete="new-password" required>
             <label for="password-confirmation" class="input-label">Confirmation</label>
-            <input id="password-confirmation" type="password" th:field="*{passwordConfirm}" placeholder="Confirmation du mot de passe" aria-required="true" required>
+            <input id="password-confirmation" type="password" th:field="*{passwordConfirm}" placeholder="Retapez le même mot de passe" autocomplete="new-password" required>
         </div>
 
         <!-- Bouton d'envoi -->
-        <button type="submit" class="btn btn-primary">S’inscrire</button>
+        <button id="submit" type="submit" class="btn btn-primary">S’inscrire</button>
     </form>
 
-    <p>Déjà inscrit ? <a class="login-link" th:href="@{/login}">Se connecter</a></p>
+    <!-- Critères de force du mot de passe -->
+    <div class="password-strength-criteria">
+        <ul>
+            <li id="length" class="invalid">Au moins 8 caractères</li>
+            <li id="uppercase" class="invalid">Au moins une majuscule</li>
+            <li id="lowercase" class="invalid">Au moins une minuscule</li>
+            <li id="digit" class="invalid">Au moins un chiffre</li>
+            <li id="special" class="invalid">Au moins un caractère spécial</li>
+        </ul>
+    </div>
+
+    <p>Déjà inscrit ? <a class="register-link" th:href="@{/login}">Se connecter</a></p>
 </main>
 </body>
 </html>

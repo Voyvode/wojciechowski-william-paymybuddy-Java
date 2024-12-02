@@ -1,3 +1,21 @@
+:root {
+    --color-bg-main: #C6C3BF;
+    --color-txt-main: #595959;
+    --color-bg-form: #FFFFFF;
+    --color-border-form: #E0E0E0;
+    --color-focus-border: #0D57AB;
+    --color-focus-shadow: rgba(32, 127, 238, 0.2);
+    --color-btn: #0D57AB;
+    --color-btn-hover: #0066CC;
+    --color-btn-active: #005BBB;
+    --color-err-bg: #F8D7DA;
+    --color-err-border: #F5C6CB;
+    --color-err-txt: #6C1A1A;
+    --border-radius: 8px;
+    --font-size-default: 14px;
+    --box-shadow-default: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 html, body {
     height: 100%;
     margin: 0;
@@ -5,24 +23,23 @@ html, body {
     justify-content: center;
     align-items: center;
     font-family: 'Inter', sans-serif;
-    background-color: #C6C3BF;
+    background-color: var(--color-bg-main);
 }
 
 label {
-    font-size: 14px;
+    font-size: var(--font-size-default);
     font-weight: 600;
-    color: #828282;
+    color: var(--color-txt-main);
     user-select: none;
-    margin-bottom: 8px;
 }
 
-.form-container {
+main {
     box-sizing: border-box;
     width: 512px;
     padding: 32px;
-    background-color: #FFFFFF;
-    border-radius: 8px;
-    border: 2px solid #E0E0E0;
+    background-color: var(--color-bg-form);
+    border-radius: var(--border-radius);
+    border: 2px solid var(--color-border-form);
     filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
     display: flex;
     flex-direction: column;
@@ -36,54 +53,35 @@ label {
     margin: 16px;
 }
 
-.form-register {
+.form-register, .input-pair, .password-strength-criteria {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
-/*
-.input-field {
-    font-size: 16px;
-    color: #828282;
-    border: 1px solid #E0E0E0;
-    border-radius: 8px;
-    background-color: #FFFFFF;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    padding: 8px 16px;
+
+.input-field input:focus,
+.input-pair input:focus {
+    border-color: var(--color-focus-border);
+    box-shadow: 0 0 0 3px var(--color-focus-shadow);
+    background-color: #F0F8FF;
 }
 
-.input-field input {
-    width: 100%;
-    border: none;
-    outline: none;
-    font-weight: 700;
-    font-size: 16px;
-    color: #828282;
-}
-*/
-.input-field input:focus {
-    border-color: #207FEE;
-    box-shadow: 0 0 0 3px rgba(32, 127, 238, 0.2);
-}
-
-/*** Error Messages ***/
-
-.error-message-container {
+.error-notification {
+    background-color: var(--color-err-bg);
+    border: 1px solid var(--color-err-border);
+    border-radius: var(--border-radius);
+    padding: 12px;
+    color: var(--color-err-txt);
+    font-size: var(--font-size-default);
     display: flex;
     align-items: center;
-    background-color: #F8D7DA;
-    border: 1px solid #F5C6CB;
-    border-radius: 8px;
-    padding: 12px;
-    color: #6C1A1A;
-    font-size: 14px;
     gap: 8px;
 }
 
-.error-message-container .icon {
+.error-notification .icon {
     width: 24px;
     height: 24px;
-    fill: #6C1A1A;
+    fill: var(--color-err-txt);
 }
 
 .error-message {
@@ -91,83 +89,114 @@ label {
     font-weight: 500;
 }
 
-/*** Buttons ***/
-
 .btn {
     padding: 16px;
     font-weight: 700;
     font-size: 16px;
     color: #FFFFFF;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow-default);
     transition: background-color 0.3s, box-shadow 0.2s;
 }
 
 .btn-primary {
-    background-color: #207FEE;
+    background-color: var(--color-btn);
 }
 
 .btn-primary:hover {
-    background-color: #0066CC;
+    background-color: var(--color-btn-hover);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .btn-primary:active {
-    background-color: #005BBB;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-btn-active);
+    box-shadow: var(--box-shadow-default);
 }
 
 .register-link {
     font-weight: 600;
-    color: #207FEE;
+    color: var(--color-btn);
     text-decoration: none;
 }
 
 .register-link:hover {
-    color: #0066CC;
+    color: var(--color-btn-hover);
     text-decoration: underline;
 }
 
-/* Conteneur de la paire */
 .input-pair {
+    display: inline;
     width: 320px;
     font-size: 16px;
-    color: #828282;
-    border: 1px solid #E0E0E0;
-    border-radius: 8px;
-    background-color: #FFFFFF;
+    color: var(--color-txt-main);
+    border: 1px solid var(--color-border-form);
+    border-radius: var(--border-radius);
+    background-color: var(--color-bg-form);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     padding: 8px 16px;
 }
 
-/* Champs individuels */
 .input-pair input {
     width: 100%;
     border: none;
     outline: none;
     font-weight: 700;
     font-size: 16px;
-    color: #828282;
+    color: var(--color-txt-main);
 }
 
-/* Ajoute une fine séparation entre les champs */
 .input-pair input:not(:last-child) {
-    border-bottom: 1px solid #E0E0E0;
+    border-bottom: 1px solid var(--color-border-form);
 }
 
-/* Placeholder */
 .input-pair input::placeholder {
-    color: #828282; /* Couleur plus discrète pour le placeholder */
+    color: var(--color-txt-main);
     font-weight: 400;
 }
 
-/* Effet au focus */
-.input-pair input:focus {
-    background-color: #F0F8FF;
+.input-pair:hover {
+    border-color: var(--color-focus-border);
 }
 
-.input-pair:hover {
-    border-color: #207FEE; /* Accentuation au survol */
+.password-strength-criteria {
+    position: absolute;
+    top: 550px;
+    right: -256px;
+    width: 220px;
+    padding: 8px;
+    border: 1px solid var(--color-border-form);
+    border-radius: var(--border-radius);
+    background-color: #f9f9f9;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    font-size: var(--font-size-default);
+    color: var(--color-txt-main);
+}
+
+.password-strength-criteria ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.password-strength-criteria li {
+    margin: -8px auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.password-strength-criteria .valid::before,
+.password-strength-criteria .invalid::before {
+    content: '•';
+    font-size: 24px;
+}
+
+.password-strength-criteria .valid::before {
+    color: green;
+}
+
+.password-strength-criteria .invalid::before {
+    color: red;
 }

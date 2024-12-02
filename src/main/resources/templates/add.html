@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
-    <link rel="stylesheet" href="/css/transfer.css" th:href="@{/css/transfer.css}" type="text/css">
+    <link rel="stylesheet" href="/css/add.css" th:href="@{/css/add.css}" type="text/css">
     <title>Ajouter un contact - Pay My Buddy</title>
 </head>
 <body>
-<main class="search-page">
+<main>
+
+    <!-- Navigation -->
     <header class="header">
-        <img src="/img/logo-pmb-side.svg" alt="Pay My Buddy" class="logo" aria-label="Logo de Pay My Buddy">
+        <a class="logo" th:href="@{/transfer}"><img src="/img/logo-pmb-side.svg" alt="Logo de Pay My Buddy"></a>
         <nav class="nav-items">
             <a th:href="@{/transfer}" class="nav-item">Transférer</a>
             <a th:href="@{/add}" class="nav-item active">Ajouter un contact</a>
@@ -18,13 +20,16 @@
             <a th:href="@{/logout}" class="nav-item">Se déconnecter</a>
         </nav>
     </header>
-    <form class="search-form" th:action="@{/add}" method="post">
+
+    <!-- Formulaire d’ajout à la Buddy list -->
+    <form class="add-buddy-form" th:action="@{/add}" method="post">
         <div class="input-group">
-            <label for="search-relation" class="input-label">Saisissez l’e-mail d’un contact pour l’ajouter à votre liste</label>
-            <input type="text" name="buddyEmail" id="search-relation" class="input-field" placeholder="E-mail du contact" required>
+            <label for="customer-email" class="input-label">Saisissez l’e-mail d’un contact pour l’ajouter à votre liste</label>
+            <input id="customer-email" type="text" name="buddyEmail" class="input-field" placeholder="E-mail du contact" required>
         </div>
         <button type="submit" class="btn-add">Ajouter</button>
     </form>
+
 </main>
 </body>
 </html>
