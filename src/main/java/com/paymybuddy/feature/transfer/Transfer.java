@@ -34,7 +34,7 @@ public class Transfer {
 	@Column
 	private String description;
 
-	@Column(precision = 5, scale = 2)
+	@Column(precision = 6, scale = 2)
 	@DecimalMin(value = "0.01", message = "amount must be strictly greater than 0")
 	@DecimalMax(value = "1000.00", message = "amount must not exceed 1,000")
 	private BigDecimal amount;
