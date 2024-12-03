@@ -3,6 +3,7 @@ package com.paymybuddy.feature.transfer;
 import com.paymybuddy.feature.customer.Customer;
 import com.paymybuddy.feature.customer.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.util.Set;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TransferService {
 
 	private final TransferRepository transferRepo;
@@ -31,14 +33,24 @@ public class TransferService {
 	 */
 	@Transactional
 	public void createTransfer(String senderUsername, String receiverUsername, BigDecimal amount, String description) {
+		log.debug("Creating transfer from {} to {} for amount: {}", senderUsername, receiverUsername, amount);
+
 		var sender = customerRepo.findByUsername(senderUsername)
-				.orElseThrow(() -> new NoSuchElementException("Sender not found"));
+				.orElseThrow(() -> {
+					log.error("Sender not found with username: {}", senderUsername);
+					return new NoSuchElementException("Sender not found");
+				});
 		var receiver = customerRepo.findByUsername(receiverUsername)
-				.orElseThrow(() -> new NoSuchElementException("Receiver not found"));
+				.orElseThrow(() -> {
+					log.error("Receiver not found with username {}", receiverUsername);
+					return new NoSuchElementException("Receiver not found");
+				});
 
 		var transfer = new Transfer(sender, receiver, amount, description);
 
 		transferRepo.save(transfer);
+
+		log.info("Transfer created successfully from {} to {} for amount: {}", senderUsername, receiverUsername, amount);
 	}
 
 	/**

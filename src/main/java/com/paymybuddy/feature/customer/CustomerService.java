@@ -2,6 +2,7 @@ package com.paymybuddy.feature.customer;
 
 import com.paymybuddy.core.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import java.util.NoSuchElementException;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomerService {
 
 	private final CustomerRepository customerRepo;
@@ -27,19 +29,27 @@ public class CustomerService {
 	 */
 	@Transactional
 	public void changePassword(String customerUsername, String oldPassword, String newPassword) {
+		log.debug("{} initiated password change", customerUsername);
+
 		if (oldPassword == null || newPassword == null || newPassword.isBlank()) {
-			throw new IllegalArgumentException("Passwords must not be null or blank");
+			log.error("{} entered blank password", customerUsername);
+			throw new IllegalArgumentException("Password must not be null or blank");
 		}
 
 		var existingCustomer = customerRepo.findByUsername(customerUsername)
-				.orElseThrow(() -> new NoSuchElementException("Customer not found with username: " + customerUsername));
+				.orElseThrow(() -> {
+					log.error("Customer {} not found", customerUsername);
+					return new NoSuchElementException("Customer not found with username: " + customerUsername);
+				});
 
 		if (!SecurityUtils.verifyPassword(oldPassword, existingCustomer.getPasswordHash())) {
-			throw new IllegalArgumentException("Old password does not match");
+			log.warn("Old password does not match for {}", customerUsername);
+			throw new IllegalArgumentException("L’ancien mot de passe est incorrect");
 		}
 
 		if (!SecurityUtils.isPasswordStrong(newPassword)) {
-			throw new IllegalArgumentException("New password is not strong enough");
+			log.warn("New password provided is not strong enough for {}", customerUsername);
+			throw new IllegalArgumentException("Force du nouveau mot de passe insuffisante");
 		}
 
 		var newPasswordHash = SecurityUtils.hashPassword(newPassword);
@@ -58,21 +68,33 @@ public class CustomerService {
 	 */
 	@Transactional
 	public String addBuddy(String customerUsername, String buddyEmail) {
+		log.debug("User {} is attempting to add buddy with email: {}", customerUsername, buddyEmail);
+
 		var customer = customerRepo.findByUsername(customerUsername)
-				.orElseThrow(() -> new NoSuchElementException("Customer not found"));
+				.orElseThrow(() -> {
+					log.error("Customer {} not found", customerUsername);
+					return new NoSuchElementException("Customer not found");
+				});
+
 		var buddy = customerRepo.findByEmail(buddyEmail)
-				.orElseThrow(() -> new NoSuchElementException("Buddy not found"));
+				.orElseThrow(() -> {
+					log.error("Buddy not found with email {}", buddyEmail);
+					return new NoSuchElementException("Buddy not found");
+				});
 
 		if (customer.getId().equals(buddy.getId())) {
-			throw new IllegalArgumentException("A customer can't be buddy with themselves");
+			log.error("{} tried to be buddy its own buddy?!", customerUsername);
+			throw new IllegalArgumentException("A customer can't be its own buddy!");
 		}
 
 		if (customer.getBuddies().contains(buddy)) {
+			log.info("Buddy with email {} is already added to {} buddy list", buddyEmail, customerUsername);
 			throw new IllegalArgumentException("This buddy is already there");
 		}
 
 		customer.addBuddy(buddy);
 		customerRepo.save(customer);
+		log.info("{} added {} to its buddy list", buddyEmail, customerUsername);
 
 		return buddy.getUsername();
 	}

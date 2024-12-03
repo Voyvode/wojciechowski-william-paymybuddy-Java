@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.NoSuchElementException;
-
 /**
  * Controller for managing customer-related operations.
  *
@@ -59,7 +57,7 @@ public class CustomerController {
 	 * @param redirectAttributes the attributes for flash messages
 	 * @return redirect URL
 	 */
-	@PostMapping("/profile/change-password")
+	@PostMapping("/profile")
 	public String changePassword(@Valid @RequestParam String oldPassword,
 								 @Valid @RequestParam String newPassword,
 								 HttpServletRequest request,
@@ -75,13 +73,10 @@ public class CustomerController {
 		try {
 			customerService.changePassword(customerUsername, oldPassword, newPassword);
 			log.info("Password for customer {} updated successfully", customerUsername);
-			redirectAttributes.addFlashAttribute("message", "Password updated successfully");
+			redirectAttributes.addFlashAttribute("message", "Mot de passe mis à jour");
 		} catch (IllegalArgumentException e) {
-			log.warn("Password update failed for {}: incorrect old password.", customerUsername);
-			redirectAttributes.addFlashAttribute("error", "Mot de passe incorrect. Réessayez.");
-		} catch (NoSuchElementException e) {
-			log.error("Failed to update password for customer {}", customerUsername);
-			redirectAttributes.addFlashAttribute("error", "Failed to update password. Please try again.");
+			log.warn("Password update failed for {}: {}", customerUsername, e.getMessage());
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
 		}
 		return "redirect:/profile";
 	}

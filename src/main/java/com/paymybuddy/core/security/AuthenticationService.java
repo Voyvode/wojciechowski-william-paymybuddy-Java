@@ -32,6 +32,8 @@ public class AuthenticationService {
 	 */
 	@Transactional
 	public void register(String username, String email, String password) {
+		log.debug("Attempting registration for username: {} with email: {}", username, email);
+
 		if (customerRepo.existsByUsernameOrEmail(username, email)) {
 			log.warn("Registration attempt with existing username ({}) or email ({})", username, email);
 			throw new EntityExistsException("Customer with same username or email already exists");
@@ -42,6 +44,7 @@ public class AuthenticationService {
 		}
 		var newCustomer = new Customer(username, email, SecurityUtils.hashPassword(password));
 		customerRepo.save(newCustomer);
+
 		log.info("New customer '{}' registered with {}", username, email);
 	}
 
@@ -54,6 +57,8 @@ public class AuthenticationService {
 	 * @throws AuthenticationException if authentication fails
 	 */
 	public Customer authenticate(String email, String password) throws AuthenticationException {
+		log.debug("Authenticating customer with email: {}", email);
+
 		var customer = customerRepo.findByEmail(email)
 				.filter(registeredCustomer -> SecurityUtils.verifyPassword(password, registeredCustomer.getPasswordHash()))
 				.orElseThrow(() -> {

@@ -41,10 +41,7 @@ public class AuthenticationController {
 	 */
 	@GetMapping("/")
 	public String home(HttpServletRequest request) {
-		if (isCustomerLoggedIn(request)) {
-			return "redirect:/transfer";
-		}
-		return "redirect:/login";
+		return isCustomerLoggedIn(request) ? "redirect:/transfer" : "redirect:/login";
 	}
 
 	/**
@@ -152,14 +149,10 @@ public class AuthenticationController {
 	 * @return a redirect to login or, in case of error, the register view to render
 	 */
 	@PostMapping("/register")
-	public String register(@ModelAttribute @Validated CustomerDTO dto, BindingResult result, RedirectAttributes redirectAttributes) {
-		if (result.hasErrors()) {
-			log.error("New registration attempt with errors: {}", result.getAllErrors());
-			return "register";
-		}
-
+	public String register(@ModelAttribute("newCustomer") @Validated CustomerDTO dto, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 		if (!dto.isEmailConfirmMatching() || !dto.isPasswordConfirmMatching()) {
 			log.error("Email or password field not matching. Did a robot try to register as '{}' ?", dto.getUsername());
+			model.addAttribute("error", "Confirmation " + (!dto.isEmailConfirmMatching()?"d’e-mail":"de mot de passe") + " incorrecte.");
 			return "register";
 		}
 
@@ -172,11 +165,13 @@ public class AuthenticationController {
 		} catch (EntityExistsException e) {
 			log.warn("Username '{}' or email '{}' already used", dto.getUsername(), dto.getEmail());
 			result.rejectValue("username", "error.user", "Username or email already in use");
+			model.addAttribute("error", "Pseudo ou e-mail déjà pris");
 			return "register";
 
 		} catch (IllegalArgumentException e) {
 			log.warn("Invalid password for registration attempt: {}", dto.getEmail());
 			result.rejectValue("password", "error.password", e.getMessage());
+			model.addAttribute("error", "Force du mot de passe insuffisant");
 			return "register";
 		}
 	}
