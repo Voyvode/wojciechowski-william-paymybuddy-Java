@@ -19,7 +19,7 @@ import java.util.Arrays;
  * Configuration class for setting up a development database.
  */
 @Configuration
-@Profile("dev")
+@Profile("local")
 public class DevDatabaseConfig {
 
 	/**
