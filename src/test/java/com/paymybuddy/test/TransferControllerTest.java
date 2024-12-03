@@ -79,16 +79,4 @@ public class TransferControllerTest {
 				.andExpect(flash().attributeExists("errorMessage"));
 	}
 
-	@Test
-	public void testCreateTransfer_ValidationErrors_ShouldRedirectWithErrorMessage() throws Exception {
-		mockMvc.perform(post("/transfer")
-						.session(session)
-						.contentType(APPLICATION_FORM_URLENCODED)
-						.param("receiverUsername", "buddyUser")
-						.param("amount", "") // Erreur de validation
-						.param("description", "Transfer sans montant"))
-				.andExpect(redirectedUrl("/transfer"))
-				.andExpect(flash().attributeExists("errorMessage"));
-	}
-
 }

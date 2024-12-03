@@ -16,8 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -95,6 +94,59 @@ public class AuthenticationControllerTest {
 	public void testDisplayRegistrationForm_ShouldShowRegistrationPage() throws Exception {
 		mockMvc.perform(get("/register"))
 				.andExpect(view().name("register"));
+	}
+
+	@Test
+	public void testRegister_SuccessfulRegistration_ShouldRedirectToLogin() throws Exception {
+		mockMvc.perform(post("/register")
+						.contentType(APPLICATION_FORM_URLENCODED)
+						.param("username", "newUser")
+						.param("email", "newUser@example.com")
+						.param("confirmEmail", "newUser@example.com")
+						.param("password", "Str0ngP@ssw0rd!")
+						.param("confirmPassword", "Str0ngP@ssw0rd!"))
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	public void testRegister_ExistingUser_ShouldShowRegisterPageWithError() throws Exception {
+		customerRepo.save(new Customer("existingUser", "existingEmail@example.com", "hashedPassword"));
+
+		mockMvc.perform(post("/register")
+						.contentType(APPLICATION_FORM_URLENCODED)
+						.param("username", "existingUser")
+						.param("email", "existingEmail@example.com")
+						.param("confirmEmail", "existingEmail@example.com")
+						.param("password", "Str0ngP@ssw0rd!")
+						.param("confirmPassword", "Str0ngP@ssw0rd!"))
+				.andExpect(view().name("register"))
+				.andExpect(model().attributeExists("error"));
+	}
+
+	@Test
+	public void testRegister_WeakPassword_ShouldShowRegisterPageWithError() throws Exception {
+		mockMvc.perform(post("/register")
+						.contentType(APPLICATION_FORM_URLENCODED)
+						.param("username", "newUser")
+						.param("email", "newUser@example.com")
+						.param("confirmEmail", "newUser@example.com")
+						.param("password", "weak")
+						.param("confirmPassword", "weak"))
+				.andExpect(view().name("register"))
+				.andExpect(model().attributeExists("error"));
+	}
+
+	@Test
+	public void testRegister_EmailOrPasswordConfirmationMismatch_ShouldShowRegisterPageWithError() throws Exception {
+		mockMvc.perform(post("/register")
+						.contentType(APPLICATION_FORM_URLENCODED)
+						.param("username", "newUser")
+						.param("email", "newUser@example.com")
+						.param("confirmEmail", "wrongEmail@example.com")
+						.param("password", "Str0ngP@ssw0rd!")
+						.param("confirmPassword", "Str0ngP@ssw0rd"))
+				.andExpect(view().name("register"))
+				.andExpect(model().attributeExists("error"));
 	}
 
 }

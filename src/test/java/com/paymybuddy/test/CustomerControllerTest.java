@@ -55,7 +55,7 @@ public class CustomerControllerTest {
 
 	@Test
 	public void testChangePassword_SuccessfulChange_ShouldRedirectToProfile() throws Exception {
-		mockMvc.perform(post("/profile/change-password")
+		mockMvc.perform(post("/profile")
 						.session(session)
 						.contentType(APPLICATION_FORM_URLENCODED)
 						.param("oldPassword", "password123")
@@ -65,7 +65,7 @@ public class CustomerControllerTest {
 
 	@Test
 	public void testChangePassword_FailedChange_ShouldRedirectWithErrorMessage() throws Exception {
-		mockMvc.perform(post("/profile/change-password")
+		mockMvc.perform(post("/profile")
 						.session(session)
 						.contentType(APPLICATION_FORM_URLENCODED)
 						.param("oldPassword", "wrongPassword") // Mot de passe incorrect
