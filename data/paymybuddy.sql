@@ -5,7 +5,7 @@ CREATE TABLE customer
 	email         VARCHAR(254) UNIQUE NOT NULL,
 	password_hash CHAR(60)            NOT NULL,
 	created_at    TIMESTAMP           NOT NULL,
-	last_login_at TIMESTAMP           NOT NULL
+	last_login_at TIMESTAMP
 );
 
 CREATE TABLE customer_buddy
@@ -19,8 +19,8 @@ CREATE TABLE customer_buddy
 CREATE TABLE transfer
 (
 	id          SERIAL PRIMARY KEY,
-	sender      INTEGER   NOT NULL REFERENCES customer (id),
-	receiver    INTEGER   NOT NULL REFERENCES customer (id),
+	sender_id   INTEGER   NOT NULL REFERENCES customer (id),
+	receiver_id INTEGER   NOT NULL REFERENCES customer (id),
 	description VARCHAR(255),
 	amount      NUMERIC(6, 2) CHECK (amount > 0 AND amount <= 1000),
 	timestamp   TIMESTAMP NOT NULL
