@@ -10,7 +10,7 @@
         <mxCell id="node0" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;customer&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; username: VARCHAR(32)&lt;br&gt; email: VARCHAR(254)&lt;br&gt; password_hash: CHAR(60)&lt;br&gt; created_at: TIMESTAMP&lt;br&gt;last_login_at: TIMESTAMP&lt;br&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; id: SERIAL&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;" parent="1" vertex="1">
           <mxGeometry x="-115" y="-93" width="217" height="193" as="geometry" />
         </mxCell>
-        <mxCell id="node1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;transfer&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; sender: INTEGER&lt;br&gt; receiver: INTEGER&lt;br&gt; description: VARCHAR(255)&lt;br&gt; amount: NUMERIC(5,2)&lt;br&gt; timestamp: TIMESTAMP&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; id: SERIAL&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;" parent="1" vertex="1">
+        <mxCell id="node1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;transfer&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; sender_id: INTEGER&lt;br&gt; receiver_id: INTEGER&lt;br&gt; description: VARCHAR(255)&lt;br&gt; amount: NUMERIC(5,2)&lt;br&gt; timestamp: TIMESTAMP&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;p style=&quot;margin:0 0 0 4px;line-height:1.6;&quot;&gt; id: SERIAL&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=14;fontFamily=Helvetica;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;" parent="1" vertex="1">
           <mxGeometry x="193" y="-93" width="195" height="193" as="geometry" />
         </mxCell>
         <mxCell id="edge1" value="" style="html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;dashed=0;startArrow=none;endArrow=block;endSize=12;strokeColor=#595959;exitX=0.393;exitY=0.000;exitDx=0;exitDy=0;entryX=0.411;entryY=1.000;entryDx=0;entryDy=0;" parent="1" source="node2" target="node0" edge="1">
@@ -36,7 +36,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="label2" value="sender:id" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;strokeColor=default;" parent="edge0" vertex="1" connectable="0">
+        <mxCell id="label2" value="sender_id:id" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;strokeColor=default;" parent="edge0" vertex="1" connectable="0">
           <mxGeometry x="120" y="38" as="geometry" />
         </mxCell>
         <mxCell id="edge2" value="" style="html=1;rounded=0;dashed=0;startArrow=none;endArrow=block;endSize=12;strokeColor=#595959;exitX=0.000;exitY=0.342;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;" parent="1" source="node1" target="node0" edge="1">
@@ -46,7 +46,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="label14" value="receiver:id" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;strokeColor=default;" parent="edge2" vertex="1" connectable="0">
+        <mxCell id="label14" value="receiver_id:id" style="edgeLabel;resizable=0;html=1;align=left;verticalAlign=top;strokeColor=default;" parent="edge2" vertex="1" connectable="0">
           <mxGeometry x="116" y="-62" as="geometry" />
         </mxCell>
       </root>
